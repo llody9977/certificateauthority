@@ -1,0 +1,53 @@
+name: Continuous Integration (CI & Test Suite)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    name: Build & Run PKI Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Frontend Production Assets
+        run: npm run build
+
+      - name: Start Root CA Test Server (Port 8088)
+        run: |
+          PORT=8088 DB_PATH=./data/test_root_db.json node server/index.js &
+          echo $! > root_ca.pid
+          sleep 3
+
+      - name: Start Subordinate CA Test Server (Port 8089)
+        run: |
+          PORT=8089 DB_PATH=./data/test_sub_db.json node server/index.js &
+          echo $! > sub_ca.pid
+          sleep 3
+
+      - name: Run Full PKI Security & Validation Suite (14 Assertions)
+        run: node test_ca_suite.js
+
+      - name: Clean Up Test Servers
+        if: always()
+        run: |
+          if [ -f root_ca.pid ]; then kill $(cat root_ca.pid) 2>/dev/null || true; rm -f root_ca.pid; fi
+          if [ -f sub_ca.pid ]; then kill $(cat sub_ca.pid) 2>/dev/null || true; rm -f sub_ca.pid; fi

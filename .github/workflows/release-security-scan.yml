@@ -1,0 +1,48 @@
+name: Release Security Scan (Vulnerabilities, Dependencies & Secrets)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [ published, created ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security-scan:
+    name: Full Security & Vulnerability Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Run npm Audit (Dependency Vulnerability Check)
+        run: npm audit --audit-level=high || true
+
+      - name: Build OCI Container Image
+        run: docker build -t stepca-web:${{ github.sha }} .
+
+      - name: Run Trivy Vulnerability Scanner on Container Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'stepca-web:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy Scan Results to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'

@@ -1,0 +1,238 @@
+{
+  "config": {
+    "type": "root",
+    "caName": "ArtifactGate Root CA v1",
+    "caCertPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
+    "caKeyEncrypted": "{\"salt\":\"3aecd8c81a00af36047023bbcea5c517\",\"iv\":\"da4330d65392ca271e4d35cc\",\"authTag\":\"f7c721ca230b20e1fe38a9c077a96d9b\",\"encrypted\":\"4df2dcd3789da27aa93c4d5bba0b36098031a911af9cf6125b2971862aae8a4935e7fb7ca747187f715f2ffb57da9272005135ff438f55659000862da0cac2f3beeef0d1cd24c8b597c6543e7aabcad03330c37cbbb43f4c75255be2fbe93c0bd128d690cb4b494e56bb6b1f2e3fa2926a9af9c86957ecec053999bb064d87de6326f250823963b6d98921014f79c1ce8839261036fadcad6697e83bb5f9f4660422dc73178a84726e000cfba589c417c0874dd58ddc54a1a66cad98da245c6a2e23e5ad490624c8136fec2e533c996b6371f8e4d1be5390898188727fbb713847e01d0fce62ce03495047b50635026b15762dbd7b2cda5d4a51ea05228f4371216c84abe77b9ea991bb0ad4ff6d4efdf892741892964773d67feeb2683b907c548c06027cb9e5b30565dc7686bd175159d968c58844691d266e1362dfdf76958195b07bcf469efc1cfbb44c5f58dc26d56c924c4aa11c6766f871f296e722010371bdd7643de11c33ea56ed9c34341bb3f54d06379b5f70d44fa586cb7f3ebf3964481e629ba606615fc4de5a5e46fd7270743c5c2258424e65f9250c6b6a089fa97929679c204474f75a4d053225e7abc826028e336c2539dee211c137d33e596297a21c9f6f83dd21a17bc742baafc004aefe3885da7a078b9c90daafbce604d11009a73b90eb2fb04f364f594a87ef53f5f871488c93e525c79c59e6f46f5b542bc24b6ff19a93766a89f60ad1ac9dabb56cf6f5c9ca17fc4439e712d27d0b91a9f198c9c7c236553e60bc9d254697d982d5a5c8961eb3cabbf6c99869a4fc80e60582018882559c265800584b29d787e2c6af9e0a2f0a3464ed610f4b97edb6a7a5aa69166fbec382163053a987150be061b7b629044eaac9fd650187983e34f42923f2830b123a427c9f53956fb55d7fe3f6e35c391116ad8093a63e5f95a6c5cf5e62e4ec1bab6dff066069777a5f7e9d4a28984da151cc79332db64e37a0c7e35d73aff1085950fedfd421be442191f68e9453493f97e41c1a31d4fbae7c0dac5f1110c70921117276eeda3c5f69df11b0abe07253756c7849faad6746cf20399bfb3b6b800d5fed3ce65a2cef2075aa6ca2679e787648f323c0410b9a94bce71978dadcd920545907b459ae1f55372ac11c0991cc15db223a07b8abdec01ca5efe9354d18929770e7cda3a9b9ce3e3b57fd49d54628ca71f24760cb2498910adcd64e486bb431ede42dcbd8cc3002678ef7bb6a3b21a8a74c6c4c5dbd4a1093f7889b25fb821e1da4bf7e5ab648ca9b53da521e350cb35142e14e4a64252bda4f27c56e9adb3d632e40ebb54dcd396fa643b6d97cab90efdbc2ff1a6e30716c3bf6e2caba5b337b6b31bd2e654426516b07cc0d3f6ae51ffeb510a0a3971a9de8266a2ea445867f49c40d38b16ec6417c87573d91206686f2a4f2138b92414b25c5bba2a24db78b201f71235a36096c2e5faf262cd0023aa3c1357a7cdb0a9fbe2adc891b062f3d029e58128c5299c752cb600e2457e2cb568f2e72cb1427ad8bfac335968f0cfc587e2069f034642f552bc28d8e17f7ac4a0718bf3c3d50bfc430632a6566fff0f4c8d419712b997e80ad1317441387721215ecc7d5f5c2096470e5d03c52eea1071456283505018fea5fe9e678e784bb24d8ea57c2206b89a146f3aaf5cd97f06c1ac03141d4dc0cd00432685419288bef364849da0d73a936dce9f1d2af1e0ec7d6c1f9d41c54969d55a756c27be19c6c525a641ee65ceb05150cd64c5258c4ed4ab63a1708fd5571766eb43b9ded07a797c721dddfbd8f0dfd62f584b1d9043719f363c1d05034f24079562e85c69f96db911701494fe80222213305ac98b50e935af57afb942fceb4aad0ebbf56e586dc3a681c7715fd27d80f1f3cd53f61b4dbcc1ec6388006c181a6b62750e2940032c6adb46ebc60b7757ed4389e0c97019ce86d8eec9f493195d0bdd41ae0fd006c34bfe0910255c5e1bb368fd302ebacbb279f5d0d22ae052ffa9db929a95f592214897d39189db7696903b535cbca5f5516863a9ac0721b81583163c3b77df6601cea447502d882f3f289cb08fceb2eb5b857b02af282acef3fef187ca9175ff08f4cd79795148625fb511408422c9026387b98b23a14111e6b59fed22bf3740ca45540102802069b5a158581b7c35730868468c2e778d226de33e9d8c1372a755f35abe70e281b862614d80de16700a9bf5f9dfef427a9a834a7f5d7f58c8672e9410d58051e9e8c4c3f7a9be53f2eb9dffbe0495fb6dacc723f6007bc00f779ebe52f386a3e681c1a53b3e6122da084c2a2f37403c535e226ccbef2c1eacaa842b5a4facec19ea4cef27a385b14397b9be70eeffc8d91a8a6475af4fa45f2289d67125a34091bff\"}",
+    "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
+    "algorithm": "RSA_2048",
+    "validityYears": 10,
+    "serialNumber": "588673518029170",
+    "fingerprint": "6D:08:34:19:C6:D0:32:E5:1C:DE:C9:99:CF:F2:0E:2A:2B:1B:41:CD:35:3A:79:5D:EE:67:82:7C:C3:F9:3C:8C",
+    "subject": {
+      "commonName": "ArtifactGate Root CA v1",
+      "organization": "ArtifactGate Security",
+      "organizationalUnit": "Security Division",
+      "country": "US",
+      "state": "California",
+      "locality": "San Francisco"
+    },
+    "createdAt": "2026-07-25T07:58:25.068Z"
+  },
+  "certificates": [
+    {
+      "id": "cert-1784966309881",
+      "serialNumber": "953638593164242",
+      "commonName": "vault.internal.domain.com",
+      "certType": "web_server",
+      "profile": "standard",
+      "algorithm": "RSA_2048",
+      "status": "REVOKED",
+      "validFrom": "2026-07-25T07:58:29.866Z",
+      "validTo": "2027-07-25T07:58:29.866Z",
+      "certPem": "-----BEGIN CERTIFICATE-----\r\nMIIEUTCCAzmgAwIBAgIICVNjhZMWQkIwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjlaFw0yNzA3MjUwNzU4MjlaMIGYMSIwIAYDVQQDExl2\r\nYXVsdC5pbnRlcm5hbC5kb21haW4uY29tMRowGAYDVQQKExFFbnRlcnByaXNlIENB\r\nIE9yZzEcMBoGA1UECxMTU2VjdXJpdHkgT3BlcmF0aW9uczELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDL68KOw9YnmZ6pM0MmKkW4u0IA\r\nN9vd/+PCTXKiK9CcWrtnxxc9RiImLKLwDtb/SbVdu9UNKEp80Z0icyGsIIVm237X\r\nx2Vnt9CYlu3TgbSXDShBkLyQjnxauFxdLyCzNZaAazI5euQDOiMqTMiH6YgCGxEE\r\nhnT5ITjmGniQfUq04Unm5TC4euTNLjJZTw5S1EKxcuXjLZI3xc6gzOUNhnFhVFG/\r\n+5XzptA3dS+vTgrbFq21jeFywN0H09Sdx5YwhwTuR4li8Yd25Qc8+ZUGtJfqlXo0\r\nx79eg0Il3SX2u4/pnT8X+u/zCBdyVScQ3Gi4APgn9BSwrpR7VJFmOVLoQXRtAgMB\r\nAAGjgZwwgZkwCQYDVR0TBAIwADAdBgNVHQ4EFgQU/nv4skycDVX1/9Nt1Y7C2u4z\r\naeAwHwYDVR0jBBgwFoAUNp1UpFdUcUtVSz8GITLgdkJGbo4wCwYDVR0PBAQDAgWg\r\nMBMGA1UdJQQMMAoGCCsGAQUFBwMBMCoGA1UdEQQjMCGCGXZhdWx0LmludGVybmFs\r\nLmRvbWFpbi5jb22HBAoABA8wDQYJKoZIhvcNAQELBQADggEBAGRNBtAxuiRadoSb\r\nbmr4S1PBFU1cAQ+qQgjHcYjSwC+7wJXTLdAuGMiXSxR+Av7IFdyWTcz7mvX4YiBj\r\nokaUdZDyHBsNcWd8lgW9LlV90PCA/118xnzxiUKrmzdBviY7fgiKyVgZfHjnPnwC\r\nzWKASEfgmWUFeL/IQtI830n0lD3aXIvkUCZ9c8NAfqpahPlfelVh6snNGKGYCWsb\r\nUlZZbfvroHg1N4z4PpHwGj1sNOxt5ykbvgjpqAYiNPI3NVM8KqhNJm38zVaTKRFh\r\np93IrmQRLxe8WmF3MJLdAftU0j4BHiQEjWwVoXlMSB0x55LrkzhUb9rliGLsIWke\r\ntgtqsZI=\r\n-----END CERTIFICATE-----\r\n",
+      "privateKeyPem": "-----BEGIN RSA PRIVATE KEY-----\r\nMIIEogIBAAKCAQEAy+vCjsPWJ5meqTNDJipFuLtCADfb3f/jwk1yoivQnFq7Z8cX\r\nPUYiJiyi8A7W/0m1XbvVDShKfNGdInMhrCCFZtt+18dlZ7fQmJbt04G0lw0oQZC8\r\nkI58WrhcXS8gszWWgGsyOXrkAzojKkzIh+mIAhsRBIZ0+SE45hp4kH1KtOFJ5uUw\r\nuHrkzS4yWU8OUtRCsXLl4y2SN8XOoMzlDYZxYVRRv/uV86bQN3Uvr04K2xattY3h\r\ncsDdB9PUnceWMIcE7keJYvGHduUHPPmVBrSX6pV6NMe/XoNCJd0l9ruP6Z0/F/rv\r\n8wgXclUnENxouAD4J/QUsK6Ue1SRZjlS6EF0bQIDAQABAoIBAANBHyoltINoIK5y\r\nCx7DHwTOSi0Vfj4kjLPr5OedxNZSjaEkh2MtMVcalkMIjNrpSouG/Do2LR9VY8zf\r\nhVH+o9XwTa24Fm3I7hyoHn5jwy4Ii3GcIdodaVrVNxdBi7a852c5AINl2CTw0WrQ\r\nrhx0uWBDOiJke8Gav70avJAr+0XixYqRS8Qd7LiYaF54eZ56Afql1bmJYs1uqSiK\r\nE10m3X2Ypziihj3XFe0HF4wypOIxSna5hZf54vrss/2L/DAWv9QFp6lTv+SJZH8X\r\nmVRHTh5Sy8GZagxhUJM7RQh3aErWZMufWJS46A5v9e8RPoEaI4QvgOrbAk+ny7sH\r\nuksx36cCgYEA8P7jn6hL6i+LspHeFAETiic9ryIrkA6xUE/JM9ZDNNvLeVrT80+d\r\nVGyYTzIXVD4EHlHNdj+IM5SDfvsq/36Vu6lSKoH0C+3hLjN/DqftgTkTtxSMp7NG\r\nAYtJoTUyB2mawTKpbaoNcUdHXp24TYCOF3mIHtk5pvhJwgw9xgz3bEcCgYEA2J30\r\ngzSexEvHmmbm8gukcYG8jdJMzznlacZ8BGgw5g+//SuszH4CcVNzOGf42rcjTmkC\r\nLX0KXfJAWbnXzy+Fh2nmNGqyKyICL22+rv6ktNoIG9w2e51OwmYUqpK3Qj9S7pwm\r\nOy7D6ZkUdsTZNrsv6jc53zVSzSiGq4pu75VQV6sCgYAtE1+74xyf5ti4Q7RIBZOE\r\nCabt9PQ086qSnPnDKlZTsrCyOBzgq4l/2vf6CCJ47UiT6zUE4wk0rJiTzaLTOvgC\r\nq77kmH3vJUUzAQrI0PwJaYWYfs14KH31l/njnzGGVWhOro0mJ+Jvx6c/uTxZsqvh\r\nFCgzrOmto08YbnW3b4FvzQKBgFSDI9+AyySosCJ0XUw38Jt8U3U9hEwhOXlQQBh0\r\nEgfgQzZiMNPDoe5W8ZAjOHsUkojH/VqD+2R13FdlY2ZpEv6m+XKf4g1kAlhAx/F8\r\nVgRdQGamPvdxg0XjD9MQ1MDa9d80OtJCR5s+5zYDTP/GfkYx77k/E6QJWKlapDeD\r\nGMprAoGAXWVtuxtzYXfasVzZpKYCdmuc/JS85E1odatoYtmhI+6D3+xnNklrltlp\r\njY0ui+Pjmwbw65Co0d2Rh4QEo5Hiwub/9BBr/MHHTHOsV6G+niTSKcnhnitExDIb\r\n/Zw4Pwn38M+9SgMLTr3Px2dxK2j38tyqSQLdNTVpkjd00MTEWeQ=\r\n-----END RSA PRIVATE KEY-----\r\n",
+      "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
+      "fingerprint": "F9:04:A0:BB:01:CC:DF:47:1E:AD:15:22:55:9C:04:A3:5D:4C:FD:FD:23:15:78:19:64:61:2F:CF:C1:16:8D:97",
+      "sans": [
+        "vault.internal.domain.com",
+        "10.0.4.15"
+      ],
+      "subject": {
+        "commonName": "vault.internal.domain.com",
+        "organization": "Enterprise CA Org",
+        "organizationalUnit": "Security Operations",
+        "country": "US",
+        "state": "California",
+        "locality": "San Francisco"
+      },
+      "issuedAt": "2026-07-25T07:58:29.881Z",
+      "revocation": {
+        "revokedAt": "2026-07-25T07:58:40.554Z",
+        "reasonCode": 1,
+        "reasonText": "Key Compromise",
+        "details": "Private key suspected compromise"
+      }
+    }
+  ],
+  "csrs": [],
+  "opaPolicies": [
+    {
+      "id": "default-governance",
+      "name": "Default Enterprise Compliance Policy",
+      "enabled": true,
+      "description": "Enforces strict profile validity, approved signature algorithms, and key sizes.",
+      "rego": "package ca.issuance\n\ndefault allow = false\n\n# Approved Signature Algorithms\nallowed_algorithms = [\"ECDSA_P256\",\"ECDSA_P384\",\"RSA_2048\",\"RSA_4096\"]\n\n# Allowed Certificate & Credential Types\nallowed_types = [\"web_server\",\"acme_tls\",\"ssh_user\",\"ssh_host\"]\n\n# Maximum Validity Boundaries (Days)\nmax_days_by_profile = {\n    \"short_lived\": 7,\n    \"acme_tls\": 90,\n    \"standard\": 365,\n    \"ssh_user\": 30,\n    \"ssh_host\": 365\n}\n\n# Security Constraints\nallow_wildcards = false\nrequire_san = true\n\nallow {\n    input.algorithm == allowed_algorithms[_]\n    input.cert_type == allowed_types[_]\n    input.validity_days <= max_days_by_profile[input.profile]\n    valid_san_check\n    valid_wildcard_check\n}\n\nvalid_san_check {\n    require_san == false\n}\n\nvalid_san_check {\n    require_san == true\n    count(input.sans) > 0\n}\n\nvalid_wildcard_check {\n    allow_wildcards == true\n}\n\nvalid_wildcard_check {\n    allow_wildcards == false\n    input.profile == \"infrastructure\"\n}\n",
+      "settings": {
+        "allowedAlgorithms": [
+          "ECDSA_P256",
+          "ECDSA_P384",
+          "RSA_2048",
+          "RSA_4096"
+        ],
+        "allowedCertTypes": [
+          "web_server",
+          "acme_tls",
+          "ssh_user",
+          "ssh_host"
+        ],
+        "maxDaysByProfile": {
+          "short_lived": 7,
+          "acme_tls": 90,
+          "standard": 365,
+          "ssh_user": 30,
+          "ssh_host": 365
+        },
+        "allowWildcards": false,
+        "requireSan": true
+      }
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-1784968284522-ccihv",
+      "timestamp": "2026-07-25T08:31:24.522Z",
+      "action": "UPDATE_OPA_POLICY",
+      "actor": "admin",
+      "target": "Default Enterprise Compliance Policy",
+      "status": "SUCCESS",
+      "details": {
+        "policyId": "default-governance",
+        "settings": {
+          "allowedAlgorithms": [
+            "ECDSA_P256",
+            "ECDSA_P384",
+            "RSA_2048",
+            "RSA_4096"
+          ],
+          "allowedCertTypes": [
+            "web_server",
+            "acme_tls",
+            "ssh_user",
+            "ssh_host"
+          ],
+          "maxDaysByProfile": {
+            "short_lived": 7,
+            "acme_tls": 90,
+            "standard": 365,
+            "ssh_user": 30,
+            "ssh_host": 365
+          },
+          "allowWildcards": false,
+          "requireSan": true
+        }
+      }
+    },
+    {
+      "id": "log-1784968279083-8msxc",
+      "timestamp": "2026-07-25T08:31:19.083Z",
+      "action": "ISSUE_SSH_CERT",
+      "actor": "admin",
+      "target": "developer@corp.com",
+      "status": "SUCCESS",
+      "details": {
+        "sshCertId": "ssh-cert-1784968279083",
+        "certType": "ssh_user",
+        "principals": [
+          "ubuntu",
+          "devops"
+        ],
+        "validTo": "2026-08-24T08:31:19.083Z"
+      }
+    },
+    {
+      "id": "log-1784966320556-vi0eu",
+      "timestamp": "2026-07-25T07:58:40.556Z",
+      "action": "REVOKE_CERTIFICATE",
+      "actor": "admin",
+      "target": "vault.internal.domain.com",
+      "status": "SUCCESS",
+      "details": {
+        "certId": "cert-1784966309881",
+        "serialNumber": "953638593164242",
+        "reason": "Key Compromise",
+        "details": "Private key suspected compromise"
+      }
+    },
+    {
+      "id": "log-1784966315262-8cjwx",
+      "timestamp": "2026-07-25T07:58:35.262Z",
+      "action": "ISSUE_CERTIFICATE",
+      "actor": "admin",
+      "target": "test.domain.com",
+      "status": "DENIED_BY_OPA",
+      "details": {
+        "violations": [
+          "Requested validity (500 days) exceeds maximum allowed (7 days) for profile 'short_lived'."
+        ],
+        "policyName": "Default Enterprise Compliance Policy"
+      }
+    },
+    {
+      "id": "log-1784966309882-8lv4g",
+      "timestamp": "2026-07-25T07:58:29.882Z",
+      "action": "ISSUE_CERTIFICATE",
+      "actor": "admin",
+      "target": "vault.internal.domain.com",
+      "status": "SUCCESS",
+      "details": {
+        "certId": "cert-1784966309881",
+        "serialNumber": "953638593164242",
+        "certType": "web_server",
+        "profile": "standard",
+        "fingerprint": "F9:04:A0:BB:01:CC:DF:47:1E:AD:15:22:55:9C:04:A3:5D:4C:FD:FD:23:15:78:19:64:61:2F:CF:C1:16:8D:97",
+        "validTo": "2027-07-25T07:58:29.866Z"
+      }
+    },
+    {
+      "id": "log-1784966305068-4gqy9",
+      "timestamp": "2026-07-25T07:58:25.068Z",
+      "action": "INITIALIZE_ROOT_CA",
+      "actor": "system",
+      "target": "ArtifactGate Root CA v1",
+      "status": "SUCCESS",
+      "details": {
+        "caType": "Root CA",
+        "algorithm": "RSA_2048",
+        "fingerprint": "6D:08:34:19:C6:D0:32:E5:1C:DE:C9:99:CF:F2:0E:2A:2B:1B:41:CD:35:3A:79:5D:EE:67:82:7C:C3:F9:3C:8C",
+        "serialNumber": "588673518029170"
+      }
+    }
+  ],
+  "sshCertificates": [
+    {
+      "id": "ssh-cert-1784968279083",
+      "identity": "developer@corp.com",
+      "certType": "ssh_user",
+      "profile": "ssh_user",
+      "algorithm": "ECDSA_P256",
+      "status": "ACTIVE",
+      "principals": [
+        "ubuntu",
+        "devops"
+      ],
+      "validFrom": "2026-07-25T08:31:19.083Z",
+      "validTo": "2026-08-24T08:31:19.083Z",
+      "sshCertPayload": {
+        "certType": "user (1)",
+        "keyId": "developer@corp.com",
+        "serialNumber": "289581502713216",
+        "validPrincipals": [
+          "ubuntu",
+          "devops"
+        ],
+        "validFrom": "2026-07-25T08:31:19.083Z",
+        "validTo": "2026-08-24T08:31:19.083Z",
+        "extensions": [
+          "permit-pty",
+          "permit-agent-forwarding",
+          "permit-port-forwarding",
+          "permit-user-rc"
+        ],
+        "caFingerprint": "6D:08:34:19:C6:D0:32:E5:1C:DE:C9:99:CF:F2:0E:2A:2B:1B:41:CD:35:3A:79:5D:EE:67:82:7C:C3:F9:3C:8C",
+        "signedOpenSshCertPem": "ssh-rsa-cert-v01@openssh.com AAAAH3NzaC1yc2EtY2VydC12MDFAb3BlbnNzaC5jb20AAAA... developer@corp.com"
+      },
+      "issuedAt": "2026-07-25T08:31:19.083Z"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+data/test_*.json
+root_ca.pid
+sub_ca.pid
+coverage/
