@@ -1,17 +1,23 @@
-# StepCA Enterprise PKI Platform (`step-ca` Engine)
+# Certificate Authority Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![OCI Container Image](https://img.shields.io/badge/Container-OCI%20Single%20Image-emerald)](Dockerfile)
 [![RFC 5280 Compliance](https://img.shields.io/badge/RFC-5280%20X.509%20v3-indigo)](https://datatracker.ietf.org/doc/html/rfc5280)
 [![OPA Governed](https://img.shields.io/badge/Governance-Open%20Policy%20Agent-amber)](https://www.openpolicyagent.org/)
 
-An enterprise-grade, production-ready Certificate Authority (CA) platform built on **`step-ca` PKI principles**, packaged as a **single OCI compliant container image**. Features **OPA policy governance**, **RFC 5280 compliance**, **OpenSSH CA signing**, **ACME protocol support**, **password-protected PKCS#12 export**, **5-minute TTL revocation caching**, and enterprise deployment support for Docker, Kubernetes, AWS ECS, Azure Container Instances, and OpenShift.
+A full-featured, secure Certificate Authority (CA) platform packaged as a **single OCI compliant container image**. Features **OPA policy governance**, **RFC 5280 compliance**, **OpenSSH CA signing**, **ACME protocol support**, **password-protected PKCS#12 export**, **5-minute TTL revocation caching**, and multi-container deployment capabilities for Docker, Kubernetes, OpenShift, AWS ECS, Azure Container Instances, and GCP Cloud Run.
+
+---
+
+## 🙏 Acknowledgements & Credits
+
+The underlying PKI architecture, certificate issuance principles, and cryptographic engine design are powered by and inspired by **[Smallstep step-ca](https://smallstep.com/docs/step-ca/)**. We gratefully acknowledge the Smallstep open-source team and community for pioneering modern open-source certificate authority and public key infrastructure engineering.
 
 ---
 
 ## 📜 RFC Specifications Compliance Summary
 
-The platform is engineered to strictly follow official Internet Engineering Task Force (IETF) Request for Comments (RFC) standards and Public Key Infrastructure (PKI) specifications:
+The platform strictly adheres to official Internet Engineering Task Force (IETF) Request for Comments (RFC) standards and Public Key Infrastructure (PKI) specifications:
 
 | RFC Specification | Standard Name | Implementation & Compliance Details |
 | :--- | :--- | :--- |
@@ -56,7 +62,7 @@ The platform is engineered to strictly follow official Internet Engineering Task
 
 ---
 
-## 📦 Enterprise Container Deployment Instructions
+## 📦 Container Deployment Instructions
 
 The platform is packaged as a standard, multi-stage OCI container image containing both the Express backend engine and compiled React frontend assets.
 
@@ -100,26 +106,26 @@ docker run -d \
 
 ### 4. Kubernetes (k8s) / OpenShift Deployment Manifest Example
 
-For enterprise Kubernetes clusters, deploy using `PersistentVolumeClaim` and `Deployment`:
+Deploy using `PersistentVolumeClaim` and `Deployment`:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stepca-root-ca
+  name: ca-root-instance
   namespace: pki-infrastructure
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stepca-root-ca
+      app: ca-root-instance
   template:
     metadata:
       labels:
-        app: stepca-root-ca
+        app: ca-root-instance
     spec:
       containers:
-      - name: stepca-engine
+      - name: ca-engine
         image: certificateauthority:latest
         ports:
         - containerPort: 3001
@@ -148,7 +154,7 @@ spec:
   - port: 8088
     targetPort: 3001
   selector:
-    app: stepca-root-ca
+    app: ca-root-instance
 ```
 
 ---
@@ -164,7 +170,7 @@ node test_ca_suite.js
 ### Test Suite Output:
 ```text
 ============================================================
-  ENTERPRISE step-ca FULL PKI SECURITY & VALIDATION SUITE
+  FULL PKI SECURITY & VALIDATION SUITE
 ============================================================
 
 >>> TEST 1: Checking Root CA Health & Initialization...
@@ -217,9 +223,9 @@ node test_ca_suite.js
 │   │   ├── CsrStudio.jsx     # CSR studio, X.509 issuance, & OpenSSH signing
 │   │   ├── OpaManager.jsx    # Form-based OPA policy builder & simulator
 │   │   └── AuditLogViewer.jsx# Searchable audit trail & CSV exporter
-│   ├── index.css        # ArtifactGate design tokens, typography, & controls
+│   ├── index.css        # UI design tokens, typography, & controls
 │   └── App.jsx          # Main application layout
-├── Dockerfile           # Multi-stage production OCI container image definition
+├── Dockerfile           # Multi-stage OCI container image definition
 └── test_ca_suite.js     # Self-contained 14-point automated test runner
 ```
 

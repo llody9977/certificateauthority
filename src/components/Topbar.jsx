@@ -169,8 +169,8 @@ export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onO
             <i></i><i></i><i></i>
           </div>
           <div>
-            <strong>StepCA Enterprise</strong>
-            <small>step-ca Core • OPA Governed</small>
+            <strong>Certificate Authority</strong>
+            <small>OPA Governed • Powered by step-ca Engine</small>
           </div>
         </div>
 

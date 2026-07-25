@@ -549,5 +549,5 @@ if (fs.existsSync(distPath)) {
 }
 
 app.listen(PORT, () => {
-  console.log(`[StepCA Enterprise Engine] Running on port ${PORT}`);
+  console.log(`[Certificate Authority Engine] Running on port ${PORT}`);
 });
