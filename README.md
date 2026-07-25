@@ -63,7 +63,7 @@ The platform is packaged as a standard, multi-stage OCI container image containi
 ### 1. Build Production Container Image
 
 ```bash
-docker build -t stepca-web:latest .
+docker build -t certificateauthority:latest .
 ```
 
 ---
@@ -78,7 +78,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8088:3001 \
   -v root_ca_data:/app/data \
-  stepca-web:latest
+  certificateauthority:latest
 ```
 
 ---
@@ -93,7 +93,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8089:3001 \
   -v sub_ca_data:/app/data \
-  stepca-web:latest
+  certificateauthority:latest
 ```
 
 ---
@@ -120,7 +120,7 @@ spec:
     spec:
       containers:
       - name: stepca-engine
-        image: stepca-web:latest
+        image: certificateauthority:latest
         ports:
         - containerPort: 3001
         volumeMounts:

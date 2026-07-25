@@ -1,5 +1,5 @@
 {
-  "name": "stepca-web",
+  "name": "certificateauthority",
   "version": "1.0.0",
   "description": "Production-grade step-ca powered Certificate Authority with OPA governance and AD CS setup wizard",
   "main": "server/index.js",

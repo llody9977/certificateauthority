@@ -31,12 +31,12 @@ jobs:
         run: npm audit --audit-level=high || true
 
       - name: Build OCI Container Image
-        run: docker build -t stepca-web:${{ github.sha }} .
+        run: docker build -t certificateauthority:${{ github.sha }} .
 
       - name: Run Trivy Vulnerability Scanner on Container Image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'stepca-web:${{ github.sha }}'
+          image-ref: 'certificateauthority:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
