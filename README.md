@@ -1,7 +1,10 @@
 # Certificate Authority Platform
 
+[![CI Pipeline](https://github.com/llody9977/certificateauthority/actions/workflows/ci.yml/badge.svg)](https://github.com/llody9977/certificateauthority/actions/workflows/ci.yml)
+[![CodeQL Analysis](https://github.com/llody9977/certificateauthority/actions/workflows/codeql.yml/badge.svg)](https://github.com/llody9977/certificateauthority/actions/workflows/codeql.yml)
+[![Release Security Scan](https://github.com/llody9977/certificateauthority/actions/workflows/release-security-scan.yml/badge.svg)](https://github.com/llody9977/certificateauthority/actions/workflows/release-security-scan.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/llody9977/certificateauthority?color=blue&logo=github)](https://github.com/llody9977/certificateauthority/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![OCI Container Image](https://img.shields.io/badge/Container-Docker%20Single%20Image-emerald)](Dockerfile)
 [![RFC 5280 Compliance](https://img.shields.io/badge/RFC-5280%20X.509%20v3-indigo)](https://datatracker.ietf.org/doc/html/rfc5280)
 [![OPA Governed](https://img.shields.io/badge/Governance-Open%20Policy%20Agent-amber)](https://www.openpolicyagent.org/)
 
