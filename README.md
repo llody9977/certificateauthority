@@ -1,17 +1,36 @@
 # Certificate Authority Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![OCI Container Image](https://img.shields.io/badge/Container-OCI%20Single%20Image-emerald)](Dockerfile)
+[![OCI Container Image](https://img.shields.io/badge/Container-Docker%20Single%20Image-emerald)](Dockerfile)
 [![RFC 5280 Compliance](https://img.shields.io/badge/RFC-5280%20X.509%20v3-indigo)](https://datatracker.ietf.org/doc/html/rfc5280)
 [![OPA Governed](https://img.shields.io/badge/Governance-Open%20Policy%20Agent-amber)](https://www.openpolicyagent.org/)
 
-A full-featured, secure Certificate Authority (CA) platform packaged as a **single OCI compliant container image**. Features **OPA policy governance**, **RFC 5280 compliance**, **OpenSSH CA signing**, **ACME protocol support**, **password-protected PKCS#12 export**, **5-minute TTL revocation caching**, and multi-container deployment capabilities for Docker, Kubernetes, OpenShift, AWS ECS, Azure Container Instances, and GCP Cloud Run.
+## 💡 Why This Web CA Was Created
+
+When looking for a Certificate Authority (CA) platform with robust capabilities comparable to **Microsoft Active Directory Certificate Services (AD CS / Windows CA)**, traditional solutions often feel heavy, resource-intensive, and tied to specific infrastructure ecosystems.
+
+In search of a lightweight, modern alternative, **Smallstep `step-ca`** stood out as an excellent, fast, and cryptographically sound PKI engine. However, `step-ca` out-of-the-box is primarily a command-line interface (CLI) tool. It lacks a native Web UI, visual AD CS-style setup wizards, form-driven policy governance, interactive trust chain inspection, visual audit trail management, and web-based certificate operations.
+
+This web application was created to bridge that gap: combining the lightweight cryptographic engine principles of `step-ca` with an intuitive web interface, Open Policy Agent (OPA) governance, visual audit logging, and streamlined certificate lifecycle operations.
 
 ---
 
 ## 🙏 Acknowledgements & Credits
 
-The underlying PKI architecture, certificate issuance principles, and cryptographic engine design are powered by and inspired by **[Smallstep step-ca](https://smallstep.com/docs/step-ca/)**. We gratefully acknowledge the Smallstep open-source team and community for pioneering modern open-source certificate authority and public key infrastructure engineering.
+The underlying PKI architecture, certificate signing workflows, and cryptographic concepts are powered by and inspired by **[Smallstep step-ca](https://smallstep.com/docs/step-ca/)**. We gratefully acknowledge the Smallstep open-source team for pioneering modern open-source certificate management.
+
+---
+
+## ✨ Features Implemented in Repository
+
+- **AD CS-Style Setup Wizard**: Interactive Root CA initialization and single `.pem` bundle setup for Subordinate Intermediate CAs.
+- **OPA Policy Governance**: Form-based policy builder and live simulator using Open Policy Agent (OPA) Rego rules.
+- **X.509 v3 & OpenSSH Signing**: Standard X.509 web server/client certificate issuance plus OpenSSH User (`ssh-rsa-cert-v01@openssh.com`) and Host certificate signing.
+- **Password-Protected PKCS#12 Export**: Secure `.pfx` / `.p12` bundle exports with TripleDES/AES key protection.
+- **RFC 5280 Revocation Sync & Caching**: Automatic `cRLDistributionPoints` (CDP OID `2.5.29.31`) embedding, 5-minute TTL revocation status caching, and multi-host parent CRL sync.
+- **Sub-CA Recovery & Revocation Lockout**: Automatic signing lockdown when a Sub-CA is revoked by its Parent CA; Sub-CA replacement option that preserves historical data; and CA decommission reset that **permanently preserves all Audit Logs**.
+- **Visual Audit Trail & CSV Export**: Searchable audit logging tracking all setup, issuance, revocation, and session unlock events.
+- **REST API & ACME Directory**: Exposes REST endpoints and ACME directory support (`/api/acme/directory`).
 
 ---
 
@@ -23,7 +42,7 @@ The platform strictly adheres to official Internet Engineering Task Force (IETF)
 | :--- | :--- | :--- |
 | **RFC 5280** | Internet X.509 Public Key Infrastructure Certificate & CRL Profile | Enforces X.509 v3 extension profiles (`BasicConstraints`, `KeyUsage`, `ExtKeyUsage`, `SKI`, `AKI`), RFC 5280 unique 64-to-128-bit positive integer serial numbers, `cRLDistributionPoints` (CDP OID `2.5.29.31`) embedding, and RFC 5280 revocation reason codes. |
 | **RFC 2986 / PKCS #10** | Certification Request Syntax Specification | Parses and verifies PKCS#10 Certificate Signing Requests (CSRs), verifies public key cryptography signatures, and extracts SAN extensions. |
-| **RFC 8555** | Automatic Certificate Management Environment (ACME Protocol) | Exposes ACME directory endpoints (`/api/acme/directory`) for automated 90-day short-lived TLS client certificate issuance. |
+| **RFC 8555** | Automatic Certificate Management Environment (ACME Protocol) | Exposes ACME directory endpoints (`/api/acme/directory`) for automated short-lived TLS client certificate issuance. |
 | **RFC 4253 / RFC 8017** | OpenSSH Certificate Architecture | Implements OpenSSH User (`ssh-rsa-cert-v01@openssh.com`) and Host Certificate Authorities, scoping short-lived SSH principals. |
 | **PKCS #12 / RFC 7292** | Personal Information Exchange Syntax Standard | Supports password-protected `.pfx` / `.p12` binary bundle exports utilizing TripleDES / AES key encryption for secure client certificate transport. |
 
@@ -34,18 +53,18 @@ The platform strictly adheres to official Internet Engineering Task Force (IETF)
 ### 1. Cryptographic Private Key Hardening
 - **At-Rest Private Key Encryption**: All CA private keys are encrypted using **AES-256-GCM authenticated encryption** combined with **PBKDF2 key derivation** (100,000 iterations) and 16-byte random salts.
 - **Zero Key Leakage**: Private key PEM payloads are stripped from all public REST API read responses.
-- **Approved Algorithms**: RSA 2048-bit, RSA 4096-bit, ECDSA P-256 (NIST), ECDSA P-384, and Ed25519.
+- **Supported Cryptographic Algorithms**: RSA 2048-bit, RSA 4096-bit, ECDSA P-256 (NIST), ECDSA P-384, and Ed25519.
 
 ### 2. OPA Policy Governance & Parameter Locking
 - **Form-Based Rego Compiler**: Administrators configure governance policies through a visual UI form. The engine compiles these rules into Open Policy Agent (OPA) Rego policy code.
-- **Strict Parameter Scoping**: Certificate issuance requests are evaluated against OPA policies before signing. Users cannot manually bypass algorithm restrictions, validity period caps per profile, or wildcard domain rules.
+- **Strict Parameter Scoping**: Certificate issuance requests are evaluated against OPA policies before signing.
 
 ### 3. X.509 v3 Extension Guard & Sub-CA Validation
 - **`basicConstraints: cA=true` Guard**: The setup engine validates all imported Subordinate CA certificates. Attempting to initialize an Intermediate CA with an end-entity certificate (e.g. `web_server`, `client_auth`) is rejected.
 - **`keyUsage: keyCertSign` Requirement**: Ensures only valid certificate signing authorities are imported.
 
 ### 4. Cross-Container Revocation Lockout & Chain Integrity
-- **Multi-Host Parent CRL Sync**: Subordinate CAs automatically query Parent Root CA CRL endpoints (`http://root-ca:3001/api/crl` or custom URLs).
+- **Multi-Host Parent CRL Sync**: Subordinate CAs automatically query Parent Root CA CRL endpoints (`/api/crl`).
 - **Sub-CA Signing Lockdown**: If a Root CA revokes a Subordinate CA certificate, the Sub-CA engine immediately locks down signing and rejects any new certificate issuance.
 - **Revocation Inheritance**: When a Sub-CA is replaced, certificates issued under the old revoked Sub-CA remain permanently marked as `CHAIN_REVOKED` / `UNTRUSTED`.
 
@@ -58,103 +77,31 @@ The platform strictly adheres to official Internet Engineering Task Force (IETF)
 
 ### 7. Immutable Audit Trail & Preservation Guarantee
 - Every CA setup, certificate issuance, revocation, OPA violation, session unlock, and CA reset writes an immutable entry to `db.auditLogs`.
-- **CA Reset Guarantee**: Resetting a CA configuration clears instance certificate state but **PERMANENTLY PRESERVES all historical Audit Logs** for compliance and forensic auditing.
+- **CA Reset Guarantee**: Resetting a CA configuration clears instance certificate state but **PERMANENTLY PRESERVES all historical Audit Logs** for compliance and auditing.
 
 ---
 
 ## 📦 Container Deployment Instructions
 
-The platform is packaged as a standard, multi-stage OCI container image containing both the Express backend engine and compiled React frontend assets.
+The application is packaged as a standard multi-stage Docker container image (`Dockerfile`) containing both the Express backend server and compiled frontend static assets.
 
-### 1. Build Production Container Image
+### 1. Build Container Image
 
 ```bash
 docker build -t certificateauthority:latest .
 ```
 
----
+### 2. Run Container Instance
 
-### 2. Run Root CA Container Instance
-
-Run an isolated Root CA container binding to host port `8088` with a persistent storage volume:
+Run an isolated container instance binding host port `8088` to container port `3001` with a persistent data volume mount:
 
 ```bash
 docker run -d \
-  --name root-ca-instance \
+  --name ca-instance \
   --restart unless-stopped \
   -p 8088:3001 \
-  -v root_ca_data:/app/data \
+  -v ca_data:/app/data \
   certificateauthority:latest
-```
-
----
-
-### 3. Run Intermediate Subordinate CA Container Instance
-
-Run a Subordinate CA container binding to host port `8089` pointing to the Parent Root CA for CRL revocation sync:
-
-```bash
-docker run -d \
-  --name intermediate-ca-instance \
-  --restart unless-stopped \
-  -p 8089:3001 \
-  -v sub_ca_data:/app/data \
-  certificateauthority:latest
-```
-
----
-
-### 4. Kubernetes (k8s) / OpenShift Deployment Manifest Example
-
-Deploy using `PersistentVolumeClaim` and `Deployment`:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ca-root-instance
-  namespace: pki-infrastructure
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ca-root-instance
-  template:
-    metadata:
-      labels:
-        app: ca-root-instance
-    spec:
-      containers:
-      - name: ca-engine
-        image: certificateauthority:latest
-        ports:
-        - containerPort: 3001
-        volumeMounts:
-        - mountPath: /app/data
-          name: ca-storage
-        readinessProbe:
-          httpGet:
-            path: /api/setup/status
-            port: 3001
-          initialDelaySeconds: 5
-          periodSeconds: 10
-      volumes:
-      - name: ca-storage
-        persistentVolumeClaim:
-          claimName: root-ca-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: root-ca-service
-  namespace: pki-infrastructure
-spec:
-  type: ClusterIP
-  ports:
-  - port: 8088
-    targetPort: 3001
-  selector:
-    app: ca-root-instance
 ```
 
 ---
@@ -225,7 +172,7 @@ node test_ca_suite.js
 │   │   └── AuditLogViewer.jsx# Searchable audit trail & CSV exporter
 │   ├── index.css        # UI design tokens, typography, & controls
 │   └── App.jsx          # Main application layout
-├── Dockerfile           # Multi-stage OCI container image definition
+├── Dockerfile           # Multi-stage Docker container image definition
 └── test_ca_suite.js     # Self-contained 14-point automated test runner
 ```
 
