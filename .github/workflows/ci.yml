@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   test-and-build:
-    name: Build & Run PKI Test Suite
+    name: Build, OPA Check & Run PKI Test Suite
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Install OPA & Test Rego Policies
+        run: |
+          curl -sL -o /tmp/opa https://github.com/open-policy-agent/opa/releases/download/v1.18.2/opa_linux_amd64_static
+          chmod +x /tmp/opa
+          /tmp/opa test policy/
 
       - name: Build Frontend Production Assets
         run: npm run build
@@ -43,8 +49,8 @@ jobs:
           echo $! > sub_ca.pid
           sleep 3
 
-      - name: Run Full PKI Security & Validation Suite (14 Assertions)
-        run: node test_ca_suite.js
+      - name: Run Full PKI Security Suite & Code Coverage Check
+        run: npx c8 --include='server/db.js' --lines 90 node test_ca_suite.js
 
       - name: Clean Up Test Servers
         if: always()

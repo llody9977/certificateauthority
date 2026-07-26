@@ -285,6 +285,54 @@ async function runTestSuite() {
       'RFC 5280 cRLDistributionPoints (CDP) extension correctly embedded in issued X.509 certificate!'
     );
 
+    // -------------------------------------------------------------
+    // TEST 7: Testing Direct PKI Server Functions (SSH, PKCS12, CRL, OPA)
+    // -------------------------------------------------------------
+    console.log('\n>>> TEST 7: Testing Advanced PKI Modules (SSH Signing, PKCS12 Export, CRL, OPA)...');
+    
+    // Import server modules directly for unit coverage
+    const { issueSshCertificate, exportPkcs12, generateCrl, setCaSessionPassphrase, clearCaSessionPassphrase } = await import('./server/pki.js');
+    const { evaluatePolicy } = await import('./server/opa.js');
+
+    // Test OPA Evaluation
+    const opaAllowed = evaluatePolicy({ algorithm: 'RSA_2048', validity_days: 365, sans: ['valid.domain.local'], cert_type: 'web_server', profile: 'standard' });
+    assert(opaAllowed.allowed === true, 'OPA Policy Evaluation cleanly ALLOWS compliant certificate request');
+
+    const opaDenied = evaluatePolicy({ algorithm: 'RSA_2048', validity_days: 1000, sans: ['invalid.local'], cert_type: 'web_server', profile: 'standard' });
+    assert(opaDenied.allowed === false, 'OPA Policy Evaluation cleanly DENIES request exceeding validity period limit');
+
+    // Test Session unlock/lock
+    setCaSessionPassphrase(PASSPHRASE, 15);
+    
+    // Test SSH Certificate Signing
+    const sshCert = issueSshCertificate({
+      identity: 'user@enterprise.internal',
+      certType: 'ssh_user',
+      principals: ['ubuntu', 'admin'],
+      validityDays: 30,
+      masterPassphrase: PASSPHRASE
+    });
+    assert(sshCert && sshCert.id, 'OpenSSH User Certificate signed cleanly');
+
+    // Test CRL Generation
+    const crlObj = generateCrl();
+    assert(crlObj && crlObj.revokedCertificates !== undefined, 'CRL object generated successfully with revoked certificates list');
+
+    // Test PKCS#12 Export
+    const { issueCertificate } = await import('./server/pki.js');
+    const unitCert = await issueCertificate({
+      commonName: 'unit.pkcs12.test',
+      certType: 'web_server',
+      profile: 'standard',
+      validityDays: 365,
+      algorithm: 'RSA_2048',
+      masterPassphrase: PASSPHRASE
+    });
+    const p12Buffer = exportPkcs12(unitCert.id, 'P12Password123!');
+    assert(p12Buffer && p12Buffer.length > 0, 'Password-protected PKCS#12 (.pfx) bundle generated successfully');
+
+    clearCaSessionPassphrase();
+
     console.log('\n============================================================');
     console.log(`  SECURITY VALIDATION RESULTS: ${passed} Passed, ${failed} Failed`);
     console.log('============================================================\n');
