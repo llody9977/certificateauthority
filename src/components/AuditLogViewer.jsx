@@ -211,6 +211,17 @@ export function AuditLogViewer() {
                 </div>
               </div>
 
+              {selectedLog.integrityHash && (
+                <div style={{ marginBottom: '1rem', padding: '0.75rem', background: '#0f172a', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ fontSize: '0.775rem', fontWeight: 600, color: '#38bdf8', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <ShieldCheck size={14} color="#10b981" /> HMAC Audit Log Integrity Signature (SHA-256 Validated)
+                  </div>
+                  <div style={{ fontFamily: 'monospace', fontSize: '0.75rem', color: '#94a3b8', wordBreak: 'break-all' }}>
+                    {selectedLog.integrityHash}
+                  </div>
+                </div>
+              )}
+
               <div className="form-group">
                 <small className="form-label">Full Audit Payload (JSON)</small>
                 <textarea

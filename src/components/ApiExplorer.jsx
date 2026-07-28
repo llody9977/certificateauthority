@@ -44,10 +44,45 @@ export function ApiExplorer() {
     },
     {
       method: 'POST',
-      path: '/api/certificates/:id/export/pfx',
-      description: 'Export password-protected PKCS#12 (.pfx / .p12) bundle.',
+      path: '/api/mcp',
+      description: 'Model Context Protocol (MCP) JSON-RPC 2.0 interface for AI assistants & automated agents.',
       samplePayload: {
-        password: 'ExportSecretPassword123!'
+        jsonrpc: '2.0',
+        id: 'mcp-1',
+        method: 'tools/call',
+        params: {
+          name: 'check_ca_status',
+          arguments: { forceRefresh: true }
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/.well-known/est/cacerts',
+      description: 'RFC 7030 Enrollment over Secure Transport (EST) CA trust chain endpoint.'
+    },
+    {
+      method: 'GET',
+      path: '/api/certificates/alerts',
+      description: 'Fetch certificate expiration risk tiers (Critical, Warning, Attention, Healthy).'
+    },
+    {
+      method: 'POST',
+      path: '/api/certificates/bulk-issue',
+      description: 'High-throughput batch certificate issuance under OPA policy rules.',
+      samplePayload: {
+        items: [
+          { commonName: 'service-1.internal.domain', certType: 'web_server', validityDays: 90 },
+          { commonName: 'service-2.internal.domain', certType: 'client_auth', validityDays: 180 }
+        ]
+      }
+    },
+    {
+      method: 'POST',
+      path: '/api/certificates/import',
+      description: 'Import external X.509 PEM certificate into inventory for discovery and inspection.',
+      samplePayload: {
+        certPem: '-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----'
       }
     },
     {

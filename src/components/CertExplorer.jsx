@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, ShieldCheck, Download, AlertTriangle, Key, Clock, FileText, CheckCircle, RefreshCw, XCircle, ShieldAlert, GitCommit, Layers } from 'lucide-react';
 import { ExportModal } from './ExportModal.jsx';
+import { CertImportModal } from './CertImportModal.jsx';
+import { Upload } from 'lucide-react';
 
 export function CertExplorer({ caStatus, onRequestNewCert }) {
   const [certs, setCerts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -124,11 +127,20 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 ⚡ Revocation Cache: {cacheStats.cached ? `Hit (${cacheStats.cacheAgeSeconds}s old)` : 'Refreshed'} • TTL 300s
               </span>
             )}
+            <button className="btn btn-secondary" onClick={() => setShowImportModal(true)} style={{ fontSize: '0.85rem' }}>
+              <Upload size={14} /> Import External Cert
+            </button>
             <button className="btn btn-primary" onClick={onRequestNewCert}>
               + Issue New Certificate
             </button>
           </div>
         </div>
+
+        <CertImportModal
+          isOpen={showImportModal}
+          onClose={() => setShowImportModal(false)}
+          onImportSuccess={() => fetchCertificates()}
+        />
 
         {/* Search & Multi-field Filter Controls */}
         <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-subtle)' }}>
