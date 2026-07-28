@@ -17,7 +17,7 @@ const ROOT_CA_HOST = 'http://localhost:8088';
 const SUB_CA_HOST = 'http://localhost:8089';
 const PASSPHRASE = 'MasterPassphrase123!';
 
-function request(url, method = 'GET', body = null) {
+function request(url, method = 'GET', body = null, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const urlObj = new URL(url);
     const postData = body ? JSON.stringify(body) : '';
@@ -29,7 +29,8 @@ function request(url, method = 'GET', body = null) {
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData),
-        'Connection': 'close'
+        'Connection': 'close',
+        ...extraHeaders
       }
     };
 
@@ -78,8 +79,8 @@ async function runTestSuite() {
     assert(rootStatus.status === 200, 'Root CA API reachable on port 8088');
 
     if (rootStatus.body && !rootStatus.body.initialized) {
-      console.log('  -> Root CA not initialized. Initializing Root CA automatically...');
-      const initRes = await request(`${ROOT_CA_HOST}/api/setup/root`, 'POST', {
+      console.log('  -> Initializing Root CA automatically...');
+      const initRes = await request(`${ROOT_CA_HOST}/api/setup/root-init`, 'POST', {
         caName: 'Enterprise Test Root CA v1',
         organization: 'Enterprise Test Corp',
         algorithm: 'RSA_2048',
@@ -117,6 +118,9 @@ async function runTestSuite() {
       masterPassphrase: PASSPHRASE
     });
 
+    if (webCertRes.status !== 200 || !webCertRes.body || !webCertRes.body.success) {
+      console.log('  -> webCertRes Error:', webCertRes.body);
+    }
     assert(webCertRes.status === 200 && webCertRes.body.success, 'Issued web_server certificate (cA: false)');
 
     // Attempt to set up Sub-CA with this web_server certificate
@@ -301,37 +305,79 @@ async function runTestSuite() {
     const opaDenied = evaluatePolicy({ algorithm: 'RSA_2048', validity_days: 1000, sans: ['invalid.local'], cert_type: 'web_server', profile: 'standard' });
     assert(opaDenied.allowed === false, 'OPA Policy Evaluation cleanly DENIES request exceeding validity period limit');
 
-    // Test Session unlock/lock
-    setCaSessionPassphrase(PASSPHRASE, 15);
-    
-    // Test SSH Certificate Signing
-    const sshCert = issueSshCertificate({
+    // Test SSH Certificate Signing via API
+    const sshCertRes = await request(`${ROOT_CA_HOST}/api/ssh/issue`, 'POST', {
       identity: 'user@enterprise.internal',
       certType: 'ssh_user',
       principals: ['ubuntu', 'admin'],
       validityDays: 30,
       masterPassphrase: PASSPHRASE
     });
-    assert(sshCert && sshCert.id, 'OpenSSH User Certificate signed cleanly');
+    assert(sshCertRes.status === 200 && sshCertRes.body.sshCertificate, 'OpenSSH User Certificate signed cleanly');
 
-    // Test CRL Generation
-    const crlObj = generateCrl();
-    assert(crlObj && crlObj.revokedCertificates !== undefined, 'CRL object generated successfully with revoked certificates list');
+    // Test CRL Endpoint
+    const crlRes = await request(`${ROOT_CA_HOST}/api/crl`, 'GET');
+    assert(crlRes.status === 200 && crlRes.body.revokedCertificates !== undefined, 'CRL endpoint returns valid revoked certificates list');
 
-    // Test PKCS#12 Export
-    const { issueCertificate } = await import('./server/pki.js');
-    const unitCert = await issueCertificate({
-      commonName: 'unit.pkcs12.test',
-      certType: 'web_server',
-      profile: 'standard',
-      validityDays: 365,
-      algorithm: 'RSA_2048',
-      masterPassphrase: PASSPHRASE
+    // Test PKCS#12 Export via API
+    const p12Res = await request(`${SUB_CA_HOST}/api/certificates/${restoredIssueRes.body.certificate.id}/export/pfx`, 'POST', {
+      password: 'P12Password123!'
     });
-    const p12Buffer = exportPkcs12(unitCert.id, 'P12Password123!');
-    assert(p12Buffer && p12Buffer.length > 0, 'Password-protected PKCS#12 (.pfx) bundle generated successfully');
+    assert(p12Res.status === 200, 'Password-protected PKCS#12 (.pfx) bundle generated successfully');
 
     clearCaSessionPassphrase();
+
+    // -------------------------------------------------------------
+    // TEST 8: Testing Enterprise RBAC, HMAC Audit Integrity & MCP Interface
+    // -------------------------------------------------------------
+    console.log('\n>>> TEST 8: Testing Enterprise RBAC, HMAC Audit Integrity & MCP Interface...');
+
+    // 8a. Test RBAC Forbidden Guard (Requester role cannot reset CA)
+    const rbacForbiddenRes = await request(`${ROOT_CA_HOST}/api/setup/reset`, 'POST', { passphrase: PASSPHRASE }, {
+      'X-User-Role': 'Requester',
+      'X-User-Name': 'test_requester'
+    });
+    assert(rbacForbiddenRes.status === 403, 'RBAC Middleware successfully FORBIDS Requester role from resetting CA (HTTP 403)');
+
+    // 8b. Test HMAC Audit Trail Signature Integrity
+    const auditLogsRes = await request(`${ROOT_CA_HOST}/api/audit-logs`, 'GET');
+    assert(
+      auditLogsRes.status === 200 &&
+        auditLogsRes.body.auditLogs &&
+        auditLogsRes.body.auditLogs.some(log => log.integrityHash !== undefined),
+      'SHA-256 HMAC Audit Log integrity signatures present on audit records'
+    );
+
+    // 8c. Test MCP JSON-RPC Server (tools/list)
+    const mcpListRes = await request(`${ROOT_CA_HOST}/api/mcp`, 'POST', {
+      jsonrpc: '2.0',
+      id: 'test-mcp-1',
+      method: 'tools/list',
+      params: {}
+    });
+    assert(
+      mcpListRes.status === 200 &&
+        mcpListRes.body.result &&
+        mcpListRes.body.result.tools.length >= 5,
+      'MCP JSON-RPC Server exposes tool manifest (check_ca_status, list_certificates, evaluate_opa_policy, issue_certificate, check_revocation)'
+    );
+
+    // 8d. Test MCP JSON-RPC Server (tools/call -> check_ca_status)
+    const mcpCallRes = await request(`${ROOT_CA_HOST}/api/mcp`, 'POST', {
+      jsonrpc: '2.0',
+      id: 'test-mcp-2',
+      method: 'tools/call',
+      params: {
+        name: 'check_ca_status',
+        arguments: { forceRefresh: true }
+      }
+    });
+    assert(
+      mcpCallRes.status === 200 &&
+        mcpCallRes.body.result &&
+        mcpCallRes.body.result.content[0].text.includes('caName'),
+      'MCP Tool check_ca_status executed successfully via JSON-RPC 2.0 interface'
+    );
 
     console.log('\n============================================================');
     console.log(`  SECURITY VALIDATION RESULTS: ${passed} Passed, ${failed} Failed`);

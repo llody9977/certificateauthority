@@ -23,14 +23,16 @@ The underlying PKI architecture, certificate signing workflows, and cryptographi
 
 ## ✨ Features Implemented in Repository
 
+- **Centralized Role-Based Access Control (RBAC)**: Enforces 4 role tiers (`Admin`, `Issuer`, `Requester`, `Auditor`) with Express middleware permission checks and an interactive Role Switcher in the topbar.
+- **Model Context Protocol (MCP) Interface**: Exposes a standard JSON-RPC 2.0 MCP server endpoint (`/api/mcp`) with tools (`check_ca_status`, `list_certificates`, `evaluate_opa_policy`, `issue_certificate`, `check_revocation`) enabling external AI agents to query and issue certificates under OPA policy rules.
+- **AI Certificate Assistant Studio**: Built-in interactive chat studio (`AiAssistant.jsx`) for natural language PKI management, OPA policy simulation, and safe action execution.
+- **Enriched Tamper-Evident Audit Logging**: Captures `performedBy`, `role`, `ipAddress`, and `userAgent` with SHA-256 HMAC integrity signatures (`integrityHash`).
 - **AD CS-Style Setup Wizard**: Interactive Root CA initialization and single `.pem` bundle setup for Subordinate Intermediate CAs.
 - **OPA Policy Governance**: Form-based policy builder and live simulator using Open Policy Agent (OPA) Rego rules.
 - **X.509 v3 & OpenSSH Signing**: Standard X.509 web server/client certificate issuance plus OpenSSH User (`ssh-rsa-cert-v01@openssh.com`) and Host certificate signing.
 - **Password-Protected PKCS#12 Export**: Secure `.pfx` / `.p12` bundle exports with TripleDES/AES key protection.
 - **RFC 5280 Revocation Sync & Caching**: Automatic `cRLDistributionPoints` (CDP OID `2.5.29.31`) embedding, 5-minute TTL revocation status caching, and multi-host parent CRL sync.
 - **Sub-CA Recovery & Revocation Lockout**: Automatic signing lockdown when a Sub-CA is revoked by its Parent CA; Sub-CA replacement option that preserves historical data; and CA decommission reset that **permanently preserves all Audit Logs**.
-- **Visual Audit Trail & CSV Export**: Searchable audit logging tracking all setup, issuance, revocation, and session unlock events.
-- **REST API & ACME Directory**: Exposes REST endpoints and ACME directory support (`/api/acme/directory`).
 
 ---
 

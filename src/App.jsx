@@ -6,11 +6,13 @@ import { CsrStudio } from './components/CsrStudio.jsx';
 import { OpaManager } from './components/OpaManager.jsx';
 import { AuditLogViewer } from './components/AuditLogViewer.jsx';
 import { ApiExplorer } from './components/ApiExplorer.jsx';
+import { AiAssistant } from './components/AiAssistant.jsx';
 
 export function App() {
   const [activeTab, setActiveTab] = useState('explorer');
   const [caStatus, setCaStatus] = useState(null);
   const [showWizard, setShowWizard] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ role: 'Admin', performedBy: 'admin' });
 
   const fetchCaStatus = async () => {
     try {
@@ -44,6 +46,8 @@ export function App() {
         caStatus={caStatus}
         onRefreshStatus={fetchCaStatus}
         onOpenResetWizard={() => setShowWizard(true)}
+        currentUser={currentUser}
+        onRoleChange={(newRole) => setCurrentUser(prev => ({ ...prev, role: newRole }))}
       />
 
       <main className="container" style={{ flex: 1, padding: '1.5rem 1.5rem 3rem' }}>
@@ -64,6 +68,14 @@ export function App() {
         {activeTab === 'opa' && <OpaManager />}
 
         {activeTab === 'audit' && <AuditLogViewer />}
+
+        {activeTab === 'assistant' && (
+          <AiAssistant
+            caStatus={caStatus}
+            currentUser={currentUser}
+            onRefreshStatus={fetchCaStatus}
+          />
+        )}
 
         {activeTab === 'api' && <ApiExplorer />}
       </main>

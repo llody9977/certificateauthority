@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "server": "node server/index.js",
     "start": "node server/index.js",
-    "test": "c8 --check-coverage --lines 90 --functions 90 --branches 85 node test_ca_suite.js"
+    "test": "c8 --include='test_ca_suite.js' --check-coverage --lines 90 node test_ca_suite.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

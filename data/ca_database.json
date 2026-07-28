@@ -1,122 +1,6 @@
 {
-  "config": {
-    "type": "root",
-    "caName": "ArtifactGate Root CA v1",
-    "caCertPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
-    "caKeyEncrypted": "{\"salt\":\"3aecd8c81a00af36047023bbcea5c517\",\"iv\":\"da4330d65392ca271e4d35cc\",\"authTag\":\"f7c721ca230b20e1fe38a9c077a96d9b\",\"encrypted\":\"4df2dcd3789da27aa93c4d5bba0b36098031a911af9cf6125b2971862aae8a4935e7fb7ca747187f715f2ffb57da9272005135ff438f55659000862da0cac2f3beeef0d1cd24c8b597c6543e7aabcad03330c37cbbb43f4c75255be2fbe93c0bd128d690cb4b494e56bb6b1f2e3fa2926a9af9c86957ecec053999bb064d87de6326f250823963b6d98921014f79c1ce8839261036fadcad6697e83bb5f9f4660422dc73178a84726e000cfba589c417c0874dd58ddc54a1a66cad98da245c6a2e23e5ad490624c8136fec2e533c996b6371f8e4d1be5390898188727fbb713847e01d0fce62ce03495047b50635026b15762dbd7b2cda5d4a51ea05228f4371216c84abe77b9ea991bb0ad4ff6d4efdf892741892964773d67feeb2683b907c548c06027cb9e5b30565dc7686bd175159d968c58844691d266e1362dfdf76958195b07bcf469efc1cfbb44c5f58dc26d56c924c4aa11c6766f871f296e722010371bdd7643de11c33ea56ed9c34341bb3f54d06379b5f70d44fa586cb7f3ebf3964481e629ba606615fc4de5a5e46fd7270743c5c2258424e65f9250c6b6a089fa97929679c204474f75a4d053225e7abc826028e336c2539dee211c137d33e596297a21c9f6f83dd21a17bc742baafc004aefe3885da7a078b9c90daafbce604d11009a73b90eb2fb04f364f594a87ef53f5f871488c93e525c79c59e6f46f5b542bc24b6ff19a93766a89f60ad1ac9dabb56cf6f5c9ca17fc4439e712d27d0b91a9f198c9c7c236553e60bc9d254697d982d5a5c8961eb3cabbf6c99869a4fc80e60582018882559c265800584b29d787e2c6af9e0a2f0a3464ed610f4b97edb6a7a5aa69166fbec382163053a987150be061b7b629044eaac9fd650187983e34f42923f2830b123a427c9f53956fb55d7fe3f6e35c391116ad8093a63e5f95a6c5cf5e62e4ec1bab6dff066069777a5f7e9d4a28984da151cc79332db64e37a0c7e35d73aff1085950fedfd421be442191f68e9453493f97e41c1a31d4fbae7c0dac5f1110c70921117276eeda3c5f69df11b0abe07253756c7849faad6746cf20399bfb3b6b800d5fed3ce65a2cef2075aa6ca2679e787648f323c0410b9a94bce71978dadcd920545907b459ae1f55372ac11c0991cc15db223a07b8abdec01ca5efe9354d18929770e7cda3a9b9ce3e3b57fd49d54628ca71f24760cb2498910adcd64e486bb431ede42dcbd8cc3002678ef7bb6a3b21a8a74c6c4c5dbd4a1093f7889b25fb821e1da4bf7e5ab648ca9b53da521e350cb35142e14e4a64252bda4f27c56e9adb3d632e40ebb54dcd396fa643b6d97cab90efdbc2ff1a6e30716c3bf6e2caba5b337b6b31bd2e654426516b07cc0d3f6ae51ffeb510a0a3971a9de8266a2ea445867f49c40d38b16ec6417c87573d91206686f2a4f2138b92414b25c5bba2a24db78b201f71235a36096c2e5faf262cd0023aa3c1357a7cdb0a9fbe2adc891b062f3d029e58128c5299c752cb600e2457e2cb568f2e72cb1427ad8bfac335968f0cfc587e2069f034642f552bc28d8e17f7ac4a0718bf3c3d50bfc430632a6566fff0f4c8d419712b997e80ad1317441387721215ecc7d5f5c2096470e5d03c52eea1071456283505018fea5fe9e678e784bb24d8ea57c2206b89a146f3aaf5cd97f06c1ac03141d4dc0cd00432685419288bef364849da0d73a936dce9f1d2af1e0ec7d6c1f9d41c54969d55a756c27be19c6c525a641ee65ceb05150cd64c5258c4ed4ab63a1708fd5571766eb43b9ded07a797c721dddfbd8f0dfd62f584b1d9043719f363c1d05034f24079562e85c69f96db911701494fe80222213305ac98b50e935af57afb942fceb4aad0ebbf56e586dc3a681c7715fd27d80f1f3cd53f61b4dbcc1ec6388006c181a6b62750e2940032c6adb46ebc60b7757ed4389e0c97019ce86d8eec9f493195d0bdd41ae0fd006c34bfe0910255c5e1bb368fd302ebacbb279f5d0d22ae052ffa9db929a95f592214897d39189db7696903b535cbca5f5516863a9ac0721b81583163c3b77df6601cea447502d882f3f289cb08fceb2eb5b857b02af282acef3fef187ca9175ff08f4cd79795148625fb511408422c9026387b98b23a14111e6b59fed22bf3740ca45540102802069b5a158581b7c35730868468c2e778d226de33e9d8c1372a755f35abe70e281b862614d80de16700a9bf5f9dfef427a9a834a7f5d7f58c8672e9410d58051e9e8c4c3f7a9be53f2eb9dffbe0495fb6dacc723f6007bc00f779ebe52f386a3e681c1a53b3e6122da084c2a2f37403c535e226ccbef2c1eacaa842b5a4facec19ea4cef27a385b14397b9be70eeffc8d91a8a6475af4fa45f2289d67125a34091bff\"}",
-    "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
-    "algorithm": "RSA_2048",
-    "validityYears": 10,
-    "serialNumber": "588673518029170",
-    "fingerprint": "6D:08:34:19:C6:D0:32:E5:1C:DE:C9:99:CF:F2:0E:2A:2B:1B:41:CD:35:3A:79:5D:EE:67:82:7C:C3:F9:3C:8C",
-    "subject": {
-      "commonName": "ArtifactGate Root CA v1",
-      "organization": "ArtifactGate Security",
-      "organizationalUnit": "Security Division",
-      "country": "US",
-      "state": "California",
-      "locality": "San Francisco"
-    },
-    "createdAt": "2026-07-25T07:58:25.068Z"
-  },
-  "certificates": [
-    {
-      "id": "cert-1785033024788",
-      "serialNumber": "107421921292332388",
-      "commonName": "unit.pkcs12.test",
-      "certType": "web_server",
-      "profile": "standard",
-      "algorithm": "RSA_2048",
-      "status": "ACTIVE",
-      "validFrom": "2026-07-26T02:30:24.730Z",
-      "validTo": "2027-07-26T02:30:24.730Z",
-      "certPem": "-----BEGIN CERTIFICATE-----\r\nMIIEVTCCAz2gAwIBAgIJEHQhkhKSMyOIMA0GCSqGSIb3DQEBCwUAMIGYMSAwHgYD\r\nVQQDExdBcnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RH\r\nYXRlIFNlY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UE\r\nBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lz\r\nY28wHhcNMjYwNzI2MDIzMDI0WhcNMjcwNzI2MDIzMDI0WjCBjzEZMBcGA1UEAxMQ\r\ndW5pdC5wa2NzMTIudGVzdDEaMBgGA1UEChMRRW50ZXJwcmlzZSBDQSBPcmcxHDAa\r\nBgNVBAsTE1NlY3VyaXR5IE9wZXJhdGlvbnMxCzAJBgNVBAYTAlVTMRMwEQYDVQQI\r\nEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMIIBIjANBgkqhkiG\r\n9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Move4pXExQYbDXh7NmmZ/7Qo+BGje2on7Sq\r\nx2Kpdz1fLWWztQZPBtoLcrlbHoxBLe8A30uZTviBXxpFpBhtVjty5AtyO/uALYUK\r\n1zApiYYj0YKifnyZ9KoiqdhwtF3wefiH5oN2DZ2+GzCZy0BjbsJnEE7RUGA4ws0l\r\ncMOuZC87Ke5+1FKrA/DbLbV7+oSjScNiBeJtaXpprImg1XB/48UFbbjo1zt6emMu\r\nfXT4+ipy0uk1RW1OJHxX2P6mTRHK0reUyV7QBravew8Te+2CBshRhwLEmooA/kRN\r\nlSbhyrjzY4rUzTsk2ETfEDV++6Z+eDkrX7Zq+jE6BON6MM2dgQIDAQABo4GoMIGl\r\nMAkGA1UdEwQCMAAwHQYDVR0OBBYEFP0j4g3oPg6jTCcDO0SF15cP5AN/MB8GA1Ud\r\nIwQYMBaAFDadVKRXVHFLVUs/BiEy4HZCRm6OMBkGA1UdHwQSMBAwDqAMoAqGCC9h\r\ncGkvY3JsMAsGA1UdDwQEAwIFoDATBgNVHSUEDDAKBggrBgEFBQcDATAbBgNVHREE\r\nFDASghB1bml0LnBrY3MxMi50ZXN0MA0GCSqGSIb3DQEBCwUAA4IBAQABtlvQRj+z\r\n6M/uhSP9FwJCDgkvTgzZARiajM3Yw7eJXHUq04tMQI4cLtvSB71YUbs58Xmogx2D\r\nSZ/LdYwAzKI8njtC9sBABQAAKjCS0ISRizVZj5BZ7X/wFfvEojM8m6g9EHDrnwWw\r\nFJdoWZbF4lqnS8k/1Tonv0PEN8e6OB2d4UVtrZbrGuXCAWnXQxKnVdsHbg0H3Hdv\r\nlXOYN7REWwiy0RfQqb1MN2Zrt96fpp1hQEDkUsxKSDYC50H/kaMyj6UQzFwo42gY\r\n8l3ATCvtq4zj2CUgazOo7iC3SB1KHBXTcfVvTYVuCrUOW2efXF+vz4UP+x0U34Jh\r\nx8kBI5KCSjR3\r\n-----END CERTIFICATE-----\r\n",
-      "privateKeyPem": "-----BEGIN RSA PRIVATE KEY-----\r\nMIIEpAIBAAKCAQEA0Move4pXExQYbDXh7NmmZ/7Qo+BGje2on7Sqx2Kpdz1fLWWz\r\ntQZPBtoLcrlbHoxBLe8A30uZTviBXxpFpBhtVjty5AtyO/uALYUK1zApiYYj0YKi\r\nfnyZ9KoiqdhwtF3wefiH5oN2DZ2+GzCZy0BjbsJnEE7RUGA4ws0lcMOuZC87Ke5+\r\n1FKrA/DbLbV7+oSjScNiBeJtaXpprImg1XB/48UFbbjo1zt6emMufXT4+ipy0uk1\r\nRW1OJHxX2P6mTRHK0reUyV7QBravew8Te+2CBshRhwLEmooA/kRNlSbhyrjzY4rU\r\nzTsk2ETfEDV++6Z+eDkrX7Zq+jE6BON6MM2dgQIDAQABAoIBAALgQhquy2fDH1oA\r\nPQI09k6Y6zlSqc4jL68xfye7c2+lzAWVUM4lzdlfkAhOxtNLJcuy7t1kjnJQyIFt\r\nnHd38aueKoU7JiHu4zNdUYqoym2vSBeG9+OLplhBLrSNu3G0mI8pjf+uIGZsHZYE\r\ny52J38TDD0XhfA8iIC4IwuMEgwa0vHo7qWIgb+g/gs3w5GUGCVMWkW8I4EghFuST\r\nldPZqow73iEC8zE94cN1tfdAXP4HHu23jpeXozJEw+otgfUXqko2zk1p3SeKvZPA\r\n+tStUjwMumWCjwoVksHkwboFA6vvlFnZqG0sXwcMRpMxiy3uTaOoSyGG1K2hYE1D\r\nKGajV6UCgYEA7C47dCFQOaFx3hTIZNguGUTg1Dmhvpl5sp4I+/bPLKKwrpM/qbUl\r\nLToVRzhOUkf63KoMTXvxlw31udJXo9ShJ+ZOxGQuWYQ8p+01+Fx16tjnREL96Pku\r\n77GUpIP7MZQpliuxtDvpiYJzDwovxfwlmOu9E9Go0Wp+0LzHDoTgHv0CgYEA4k+H\r\nMi02L68V1lTrApk/ZlLmO/TbtdRdJ7tZd3HPFMDtGkXbPGKCV+4lFtndfWU7uM1X\r\nm2QuSZUnfuthSDPHg/oQndsudWbtsg6TiNK3WYmgjZaNh0vTNS57KhZrXkXxnQsK\r\nUgdqXOZt4yx8ArxM6T8WRtJV2qdKEuSWK8hbudUCgYEA0kQOtkL6U3SCFX9XMUCt\r\nOd3yc76jWzbz+6tqwDdpFon41lNNuF8HLA6r5u4f/G0Mz+usbEdOPHc3Lyou0DJ7\r\nDzShJ4MxKIzsG2y6QdS/PkfBDSq/NuyxdsAYX6cIuYj4xTM9UAKO1deHa/pbsd3b\r\n8xrdCIn9zAMNx/RpG2n8xlkCgYBdIdFHSufTs7/O1l9oUFyQ5WiuH9QS/fPgF+93\r\ngjRwG/z3JOxV60wsl2pX/wxxQCnVoVt+LToHOgRo7MC6D+T5YP1ZmQuDcPo8nlcE\r\npYKirEqQOfbASOoAJsK0zUkeILaPpC15GGgjFwj9xh66mXclPbsTJhgCxXlsUPmj\r\nxu5IiQKBgQC5ZtpX3YmkKjmCxwc3d6pqJxQmsNPC8Mz83dmW6G8pOUymbmxnHLq6\r\nrX/zhki6nbZkzv2LEMO0ARPzMCp6XSWd0pCyV0lp+Gl3HYcCnODc7+Vqm8VGd4vX\r\nqw6WR+j8Wm9K4M+R2SNYwSNTGLvCTm+5z5REy/PKzuzfbyBAHvV+hw==\r\n-----END RSA PRIVATE KEY-----\r\n",
-      "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
-      "fingerprint": "96:CF:51:CB:B7:A5:A9:65:6F:EB:F6:55:69:9D:D5:87:22:2F:23:44:D6:57:C7:04:1F:38:92:C4:D4:E9:22:BB",
-      "sans": [
-        "unit.pkcs12.test"
-      ],
-      "issuerSerial": "588673518029170",
-      "issuerCn": "ArtifactGate Root CA v1",
-      "crlDistributionPoint": "/api/crl",
-      "subject": {
-        "commonName": "unit.pkcs12.test",
-        "organization": "Enterprise CA Org",
-        "organizationalUnit": "Security Operations",
-        "country": "US",
-        "state": "California",
-        "locality": "San Francisco"
-      },
-      "issuedAt": "2026-07-26T02:30:24.788Z",
-      "revocation": null
-    },
-    {
-      "id": "cert-1785033021230",
-      "serialNumber": "1673567261947357474",
-      "commonName": "unit.pkcs12.test",
-      "certType": "web_server",
-      "profile": "standard",
-      "algorithm": "RSA_2048",
-      "status": "ACTIVE",
-      "validFrom": "2026-07-26T02:30:21.214Z",
-      "validTo": "2027-07-26T02:30:21.214Z",
-      "certPem": "-----BEGIN CERTIFICATE-----\r\nMIIEVjCCAz6gAwIBAgIKAWc1ZyYZRzV0dDANBgkqhkiG9w0BAQsFADCBmDEgMB4G\r\nA1UEAxMXQXJ0aWZhY3RHYXRlIFJvb3QgQ0EgdjExHjAcBgNVBAoTFUFydGlmYWN0\r\nR2F0ZSBTZWN1cml0eTEaMBgGA1UECxMRU2VjdXJpdHkgRGl2aXNpb24xCzAJBgNV\r\nBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNp\r\nc2NvMB4XDTI2MDcyNjAyMzAyMVoXDTI3MDcyNjAyMzAyMVowgY8xGTAXBgNVBAMT\r\nEHVuaXQucGtjczEyLnRlc3QxGjAYBgNVBAoTEUVudGVycHJpc2UgQ0EgT3JnMRww\r\nGgYDVQQLExNTZWN1cml0eSBPcGVyYXRpb25zMQswCQYDVQQGEwJVUzETMBEGA1UE\r\nCBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzCCASIwDQYJKoZI\r\nhvcNAQEBBQADggEPADCCAQoCggEBALJPfiNUDdaPwNOr0vYgALA4yYZ+yDHHDovE\r\nN9mWs1dQnjyQlugmq5H3p52flkdWoUNMGAhqENEEAQuAcrgqEa46xmpXksUHM0BP\r\n2QJmxZ/gh+QTNYOiLRzSY9MSlPzgUhMY7SX0rpLFCl6EJk62eoktH9c3qMCfzZML\r\nKhVF7CJUFER7d+AJZBxnAV9NJl/W+9Bp7NYkkCj3EyDmPO0J6TacFZ/8DQi1RyBw\r\nKcQPdF6ONO8JaVAeFB9xUmWdc3z9+nXB/jVNYXBm2OqGJUq4441qfQYW0Kqz7BV0\r\nUpqcb3OLDq7n+a+CSV4SZbMDWqkTK9FrTrOoNbCdetDAPf8k4vUCAwEAAaOBqDCB\r\npTAJBgNVHRMEAjAAMB0GA1UdDgQWBBQ6REznVtXqe99yaCKRZD8tAEVt2zAfBgNV\r\nHSMEGDAWgBQ2nVSkV1RxS1VLPwYhMuB2QkZujjAZBgNVHR8EEjAQMA6gDKAKhggv\r\nYXBpL2NybDALBgNVHQ8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwGwYDVR0R\r\nBBQwEoIQdW5pdC5wa2NzMTIudGVzdDANBgkqhkiG9w0BAQsFAAOCAQEAKMTCdwHx\r\nS+nubh+PuUGEfQiPi5yGVYsGM1IqTwDMkHcuXiPd54aHuayuCf5ZxP0A/j6DNJHr\r\nsNf3PP02a1cgcdPj5A4/bNwCfFBF07+u91cMAlF0l3JeWmhYTV9IOHsAhsHUf0s0\r\nCvmEHa9yf/S+Ujd5rxJ0l1tWS77iMyRgx3CICARYDUn0h/ipubpSgu3ixFTEfc3q\r\ndaD6lzJTZ6eO4OZTVsIqnouXEuoWAgN0hQoD0uGsUY7/XfHQuUzuGR+ebwiiULT8\r\npCSWWuv7d7PuN+fqksnRLV4o898H+V31Jg8yN2GxvdPFjPJw/9PGj3TihM6Lfnnq\r\nCC0gXx4aNWpIzQ==\r\n-----END CERTIFICATE-----\r\n",
-      "privateKeyPem": "-----BEGIN RSA PRIVATE KEY-----\r\nMIIEoAIBAAKCAQEAsk9+I1QN1o/A06vS9iAAsDjJhn7IMccOi8Q32ZazV1CePJCW\r\n6CarkfennZ+WR1ahQ0wYCGoQ0QQBC4ByuCoRrjrGaleSxQczQE/ZAmbFn+CH5BM1\r\ng6ItHNJj0xKU/OBSExjtJfSuksUKXoQmTrZ6iS0f1zeowJ/NkwsqFUXsIlQURHt3\r\n4AlkHGcBX00mX9b70Gns1iSQKPcTIOY87QnpNpwVn/wNCLVHIHApxA90Xo407wlp\r\nUB4UH3FSZZ1zfP36dcH+NU1hcGbY6oYlSrjjjWp9BhbQqrPsFXRSmpxvc4sOruf5\r\nr4JJXhJlswNaqRMr0WtOs6g1sJ160MA9/yTi9QIDAQABAoH/fI9guPfUCDljpSTi\r\nugyhGSPno4yX94NBJgxsTL55ia/yL1zSDlpKgC1WFJuRie7PuF3vwUZWzlbTDrXW\r\nwyVK30CFBW8nmCZE0dL1muKFgKnY7qUnPPfi4RTCUdspONLQgtwReJz0q+f5gQ0l\r\nCtdubLqZA5ReI4bT6g8NLCSBpXhBhCG1QS0PL+l2K/sHwGuG+A9bsS65x9v68JWV\r\ndsdQ+8KOajpU29LqoLUj/IWw/pXeQwfcRt7spw0ouB351M/hEvz1tnS9TyPdWSKE\r\nPNbPatqI+OLJx/Ckd9JzGEj2REeKsk4SJ8e3TtzMbkh06DCPSxcwnwxG0m3xhMDs\r\nTajjAoGBANa+F3WTEFZ/HnepcIimuayD1YFEj8RGHJGYajIYgJdDP6XlTxdQMuRR\r\nmyOM4KVNRyPenAkVycPquAIACinevU82/6J/ZJosxCNiu3ehWQUzv5//ZStKII4P\r\nkwGIPU1r8QznCH6er93UlxpfHgDUYmwq28LqIPOhlzDaP1Rh29JXAoGBANSRhsKF\r\n6/V5iXVPl51kAuesmqHX57PXhLg3wD5LjEJOZAOjmnmIkfojlxXsRe99rOZWehWW\r\nkZRoSuGLl4qWNK1RFNwFADpb56ZHIujGNgxErRQmTNRgueOFz8eHLiRXa4TMJfUJ\r\n4K420b9WKjlZnEcwuVJ2Zj22Nw6hSSrnmt2TAoGASSNrOAdDrEIVbWoPQuuOF5y7\r\nLhDc6lt6xXfky3Ue7uXfmrAUFPuiqbLFpQEJTiOY1DWwbUO3eXvK+htrWsFbNsyj\r\nmoPLDtuqXeb1tJQGjsgGPwcsPOc9WUUiq4XsYx8ddWiGsyF3ApWydS/qNxwe/XpH\r\naQZ2/KOPq/rZUPMXfHcCgYB1iZpoSUD11SRKt53wK3Lnw6slPosiCFOcwUcNqxx9\r\nNXdcA8TQ2tFM7Q0H1EO/b1CBdOPAuCb7VsfA+zzqJrAt/Z15I1LC8jqe2MrWx3Lv\r\nSbIiaCMnc+yVgFIp0/eRpL0RCwkZ+0I/UpScJfrnB0PAoZJ3pHxYNz8uWcRpcvNQ\r\n/QKBgFXFp5TPfocPWhJKSlwm4ELAP3vm7vWZEguHnfWjFnMazas5tTrzzdmOjI16\r\n6YCOCYQNcgDFvXPPp/7XpzbOdy0hNudH3jHISlQQ5UsIkYOSlltaSOtvpQUBfFHd\r\nIHGp8rPnvyJ5L89WeYxf38rwTnqhDsJFq+xBnDr/gjNAiR+F\r\n-----END RSA PRIVATE KEY-----\r\n",
-      "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
-      "fingerprint": "74:4F:F0:F7:F1:BB:2D:D0:B4:25:1F:E5:39:3F:05:17:8C:69:77:79:D3:42:D6:F9:10:32:4E:43:99:BC:7F:1F",
-      "sans": [
-        "unit.pkcs12.test"
-      ],
-      "issuerSerial": "588673518029170",
-      "issuerCn": "ArtifactGate Root CA v1",
-      "crlDistributionPoint": "/api/crl",
-      "subject": {
-        "commonName": "unit.pkcs12.test",
-        "organization": "Enterprise CA Org",
-        "organizationalUnit": "Security Operations",
-        "country": "US",
-        "state": "California",
-        "locality": "San Francisco"
-      },
-      "issuedAt": "2026-07-26T02:30:21.230Z",
-      "revocation": null
-    },
-    {
-      "id": "cert-1784966309881",
-      "serialNumber": "953638593164242",
-      "commonName": "vault.internal.domain.com",
-      "certType": "web_server",
-      "profile": "standard",
-      "algorithm": "RSA_2048",
-      "status": "REVOKED",
-      "validFrom": "2026-07-25T07:58:29.866Z",
-      "validTo": "2027-07-25T07:58:29.866Z",
-      "certPem": "-----BEGIN CERTIFICATE-----\r\nMIIEUTCCAzmgAwIBAgIICVNjhZMWQkIwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjlaFw0yNzA3MjUwNzU4MjlaMIGYMSIwIAYDVQQDExl2\r\nYXVsdC5pbnRlcm5hbC5kb21haW4uY29tMRowGAYDVQQKExFFbnRlcnByaXNlIENB\r\nIE9yZzEcMBoGA1UECxMTU2VjdXJpdHkgT3BlcmF0aW9uczELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDL68KOw9YnmZ6pM0MmKkW4u0IA\r\nN9vd/+PCTXKiK9CcWrtnxxc9RiImLKLwDtb/SbVdu9UNKEp80Z0icyGsIIVm237X\r\nx2Vnt9CYlu3TgbSXDShBkLyQjnxauFxdLyCzNZaAazI5euQDOiMqTMiH6YgCGxEE\r\nhnT5ITjmGniQfUq04Unm5TC4euTNLjJZTw5S1EKxcuXjLZI3xc6gzOUNhnFhVFG/\r\n+5XzptA3dS+vTgrbFq21jeFywN0H09Sdx5YwhwTuR4li8Yd25Qc8+ZUGtJfqlXo0\r\nx79eg0Il3SX2u4/pnT8X+u/zCBdyVScQ3Gi4APgn9BSwrpR7VJFmOVLoQXRtAgMB\r\nAAGjgZwwgZkwCQYDVR0TBAIwADAdBgNVHQ4EFgQU/nv4skycDVX1/9Nt1Y7C2u4z\r\naeAwHwYDVR0jBBgwFoAUNp1UpFdUcUtVSz8GITLgdkJGbo4wCwYDVR0PBAQDAgWg\r\nMBMGA1UdJQQMMAoGCCsGAQUFBwMBMCoGA1UdEQQjMCGCGXZhdWx0LmludGVybmFs\r\nLmRvbWFpbi5jb22HBAoABA8wDQYJKoZIhvcNAQELBQADggEBAGRNBtAxuiRadoSb\r\nbmr4S1PBFU1cAQ+qQgjHcYjSwC+7wJXTLdAuGMiXSxR+Av7IFdyWTcz7mvX4YiBj\r\nokaUdZDyHBsNcWd8lgW9LlV90PCA/118xnzxiUKrmzdBviY7fgiKyVgZfHjnPnwC\r\nzWKASEfgmWUFeL/IQtI830n0lD3aXIvkUCZ9c8NAfqpahPlfelVh6snNGKGYCWsb\r\nUlZZbfvroHg1N4z4PpHwGj1sNOxt5ykbvgjpqAYiNPI3NVM8KqhNJm38zVaTKRFh\r\np93IrmQRLxe8WmF3MJLdAftU0j4BHiQEjWwVoXlMSB0x55LrkzhUb9rliGLsIWke\r\ntgtqsZI=\r\n-----END CERTIFICATE-----\r\n",
-      "privateKeyPem": "-----BEGIN RSA PRIVATE KEY-----\r\nMIIEogIBAAKCAQEAy+vCjsPWJ5meqTNDJipFuLtCADfb3f/jwk1yoivQnFq7Z8cX\r\nPUYiJiyi8A7W/0m1XbvVDShKfNGdInMhrCCFZtt+18dlZ7fQmJbt04G0lw0oQZC8\r\nkI58WrhcXS8gszWWgGsyOXrkAzojKkzIh+mIAhsRBIZ0+SE45hp4kH1KtOFJ5uUw\r\nuHrkzS4yWU8OUtRCsXLl4y2SN8XOoMzlDYZxYVRRv/uV86bQN3Uvr04K2xattY3h\r\ncsDdB9PUnceWMIcE7keJYvGHduUHPPmVBrSX6pV6NMe/XoNCJd0l9ruP6Z0/F/rv\r\n8wgXclUnENxouAD4J/QUsK6Ue1SRZjlS6EF0bQIDAQABAoIBAANBHyoltINoIK5y\r\nCx7DHwTOSi0Vfj4kjLPr5OedxNZSjaEkh2MtMVcalkMIjNrpSouG/Do2LR9VY8zf\r\nhVH+o9XwTa24Fm3I7hyoHn5jwy4Ii3GcIdodaVrVNxdBi7a852c5AINl2CTw0WrQ\r\nrhx0uWBDOiJke8Gav70avJAr+0XixYqRS8Qd7LiYaF54eZ56Afql1bmJYs1uqSiK\r\nE10m3X2Ypziihj3XFe0HF4wypOIxSna5hZf54vrss/2L/DAWv9QFp6lTv+SJZH8X\r\nmVRHTh5Sy8GZagxhUJM7RQh3aErWZMufWJS46A5v9e8RPoEaI4QvgOrbAk+ny7sH\r\nuksx36cCgYEA8P7jn6hL6i+LspHeFAETiic9ryIrkA6xUE/JM9ZDNNvLeVrT80+d\r\nVGyYTzIXVD4EHlHNdj+IM5SDfvsq/36Vu6lSKoH0C+3hLjN/DqftgTkTtxSMp7NG\r\nAYtJoTUyB2mawTKpbaoNcUdHXp24TYCOF3mIHtk5pvhJwgw9xgz3bEcCgYEA2J30\r\ngzSexEvHmmbm8gukcYG8jdJMzznlacZ8BGgw5g+//SuszH4CcVNzOGf42rcjTmkC\r\nLX0KXfJAWbnXzy+Fh2nmNGqyKyICL22+rv6ktNoIG9w2e51OwmYUqpK3Qj9S7pwm\r\nOy7D6ZkUdsTZNrsv6jc53zVSzSiGq4pu75VQV6sCgYAtE1+74xyf5ti4Q7RIBZOE\r\nCabt9PQ086qSnPnDKlZTsrCyOBzgq4l/2vf6CCJ47UiT6zUE4wk0rJiTzaLTOvgC\r\nq77kmH3vJUUzAQrI0PwJaYWYfs14KH31l/njnzGGVWhOro0mJ+Jvx6c/uTxZsqvh\r\nFCgzrOmto08YbnW3b4FvzQKBgFSDI9+AyySosCJ0XUw38Jt8U3U9hEwhOXlQQBh0\r\nEgfgQzZiMNPDoe5W8ZAjOHsUkojH/VqD+2R13FdlY2ZpEv6m+XKf4g1kAlhAx/F8\r\nVgRdQGamPvdxg0XjD9MQ1MDa9d80OtJCR5s+5zYDTP/GfkYx77k/E6QJWKlapDeD\r\nGMprAoGAXWVtuxtzYXfasVzZpKYCdmuc/JS85E1odatoYtmhI+6D3+xnNklrltlp\r\njY0ui+Pjmwbw65Co0d2Rh4QEo5Hiwub/9BBr/MHHTHOsV6G+niTSKcnhnitExDIb\r\n/Zw4Pwn38M+9SgMLTr3Px2dxK2j38tyqSQLdNTVpkjd00MTEWeQ=\r\n-----END RSA PRIVATE KEY-----\r\n",
-      "chainPem": "-----BEGIN CERTIFICATE-----\r\nMIID9jCCAt6gAwIBAgIIBYhnNRgCkXAwDQYJKoZIhvcNAQELBQAwgZgxIDAeBgNV\r\nBAMTF0FydGlmYWN0R2F0ZSBSb290IENBIHYxMR4wHAYDVQQKExVBcnRpZmFjdEdh\r\ndGUgU2VjdXJpdHkxGjAYBgNVBAsTEVNlY3VyaXR5IERpdmlzaW9uMQswCQYDVQQG\r\nEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNj\r\nbzAeFw0yNjA3MjUwNzU4MjVaFw0zNjA3MjUwNzU4MjVaMIGYMSAwHgYDVQQDExdB\r\ncnRpZmFjdEdhdGUgUm9vdCBDQSB2MTEeMBwGA1UEChMVQXJ0aWZhY3RHYXRlIFNl\r\nY3VyaXR5MRowGAYDVQQLExFTZWN1cml0eSBEaXZpc2lvbjELMAkGA1UEBhMCVVMx\r\nEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCF/dYJTn/qjLpbxcQNr9v5pbC3\r\nk+ef+L97113eqWuvAmDN8w750EmildRFwaGpixl+2pXL62Pml/9bAnJCuDBnkeFG\r\n7/WBVUglSDYinMQW/BQcFpXUE6fuonRFi8xk6Mgo52B3w0D9X83O827Lv3jA0Yx2\r\nURpGBCObbHFXYFzL8PMJOzuOr85VCxkXaqejx2s/7JsHwR435ohfgJePmidC/0w1\r\nWRePCsfwxO1Bv+6YfjEnVfmlZ/7u8mgp7bzr9/DcxvdqpO6gwUQWGGJZT1KtRTvm\r\nHGn8E4mq5nIWYTSbqIFw4voTUwKsqZhFKObyWJEqOX/RugvC5v/AYkcEebixAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGmMB0GA1UdDgQW\r\nBBQ2nVSkV1RxS1VLPwYhMuB2QkZujjANBgkqhkiG9w0BAQsFAAOCAQEAZESGGhHQ\r\najWMa1vdEXhRwMVMf9SS5EtHyWsr/e4R5kRfNaa/dSZ4qB3lAUNaIdANDatElGm0\r\nhgDGekUbNcsFkB1z8FcW7u5X/3MuBBgjV3CtA0z+Ov+U3tjp/hMBHT/1ryUE4yVA\r\nbY0PBnjYBFdv28jWAlQcA/xyvsT8dGiWPfgvLLQWIvB6brY8GSU3TofbKt6Ud7LN\r\ntqIss7HgHwiRHu0HCr5xqmG19pu3WdGpC58Jnsc3H0W0at+fr6cDWek0RLP6iQgp\r\nTG8/oRMYYOmv3QYW0NbndbvChN2HJ5AfOC87cY5IcMccrkedE9AEAF1HySlcKaxD\r\nL3Nfk13AJ4vEIg==\r\n-----END CERTIFICATE-----\r\n",
-      "fingerprint": "F9:04:A0:BB:01:CC:DF:47:1E:AD:15:22:55:9C:04:A3:5D:4C:FD:FD:23:15:78:19:64:61:2F:CF:C1:16:8D:97",
-      "sans": [
-        "vault.internal.domain.com",
-        "10.0.4.15"
-      ],
-      "subject": {
-        "commonName": "vault.internal.domain.com",
-        "organization": "Enterprise CA Org",
-        "organizationalUnit": "Security Operations",
-        "country": "US",
-        "state": "California",
-        "locality": "San Francisco"
-      },
-      "issuedAt": "2026-07-25T07:58:29.881Z",
-      "revocation": {
-        "revokedAt": "2026-07-25T07:58:40.554Z",
-        "reasonCode": 1,
-        "reasonText": "Key Compromise",
-        "details": "Private key suspected compromise"
-      }
-    }
-  ],
+  "config": null,
+  "certificates": [],
   "csrs": [],
   "opaPolicies": [
     {
@@ -151,6 +35,242 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "log-1785231991580-u9zj2",
+      "timestamp": "2026-07-28T09:46:31.579Z",
+      "action": "RESET_CA_CONFIGURATION",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "acc1d80aa1f2b4aa149dc21824d36db3ce1b7f71b010ae5cf6c7f9b71f5d83f9",
+      "details": {
+        "message": "CA Configuration reset to uninitialized state."
+      }
+    },
+    {
+      "id": "log-1785231991565-s8oqh",
+      "timestamp": "2026-07-28T09:46:31.565Z",
+      "action": "SESSION_UNLOCK",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ca_session",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "9d1b1b0f499f37a26121213c7b97455f38b0598d4ae90a3bf480be3d7a66bbb8",
+      "details": {
+        "durationMinutes": 15
+      }
+    },
+    {
+      "id": "log-1785231991553-6bisy",
+      "timestamp": "2026-07-28T09:46:31.553Z",
+      "action": "INITIALIZE_ROOT_CA",
+      "actor": "system",
+      "performedBy": "system",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "446abda5c42f77e581efa4d68a11c6e038a6fbf52baf78080468231c0ee03151",
+      "details": {
+        "caType": "Root CA",
+        "algorithm": "RSA_2048",
+        "fingerprint": "8F:A1:E9:F0:A3:23:A1:73:EB:A2:57:D0:1A:C0:10:40:04:F0:0B:FC:DF:E0:E2:2E:6B:FC:FD:6C:DA:D1:21:A2",
+        "serialNumber": "2509108819325717257"
+      }
+    },
+    {
+      "id": "log-1785231969559-bxrnt",
+      "timestamp": "2026-07-28T09:46:09.559Z",
+      "action": "RESET_CA_CONFIGURATION",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "5ee6bb3a7135107490b08e870d56aa5d47c50677725fd8c23dc79906f8fbc252",
+      "details": {
+        "message": "CA Configuration reset to uninitialized state."
+      }
+    },
+    {
+      "id": "log-1785231969550-c0x16",
+      "timestamp": "2026-07-28T09:46:09.550Z",
+      "action": "SESSION_UNLOCK",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ca_session",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "6da0dec163b75539d143d54ceb5f39cc9897a82849e66de4daca1cd1311a688e",
+      "details": {
+        "durationMinutes": 15
+      }
+    },
+    {
+      "id": "log-1785231969540-85yw6",
+      "timestamp": "2026-07-28T09:46:09.540Z",
+      "action": "INITIALIZE_ROOT_CA",
+      "actor": "system",
+      "performedBy": "system",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "4c3f042c925556090a36df61448a22a9b0ecd4c885b042c678ab27dfd614e26d",
+      "details": {
+        "caType": "Root CA",
+        "algorithm": "RSA_2048",
+        "fingerprint": "26:7F:CC:A8:78:6C:B0:9B:08:95:9E:DE:06:F8:84:CC:CF:59:B9:39:CA:88:2C:CE:BE:8D:FA:1A:5F:21:F7:03",
+        "serialNumber": "8130115345779357126"
+      }
+    },
+    {
+      "id": "log-1785231962523-5h3jn",
+      "timestamp": "2026-07-28T09:46:02.523Z",
+      "action": "RESET_CA_CONFIGURATION",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "5e2d4299727d91541c9784c25945415e663f56eec329105ccc09a29d8fe0153c",
+      "details": {
+        "message": "CA Configuration reset to uninitialized state."
+      }
+    },
+    {
+      "id": "log-1785231962514-xrt9h",
+      "timestamp": "2026-07-28T09:46:02.514Z",
+      "action": "SESSION_UNLOCK",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ca_session",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "d3462de4e6fe3b1911507ca3e908cff1cfca08af3d9a053c86682f1fd58b575b",
+      "details": {
+        "durationMinutes": 15
+      }
+    },
+    {
+      "id": "log-1785231962504-dm3jn",
+      "timestamp": "2026-07-28T09:46:02.504Z",
+      "action": "INITIALIZE_ROOT_CA",
+      "actor": "system",
+      "performedBy": "system",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "6c6be795bd4bd0e7c56981dc6240f5155a32f958155778497c2aba57734018f1",
+      "details": {
+        "caType": "Root CA",
+        "algorithm": "RSA_2048",
+        "fingerprint": "AC:5B:9C:7F:FA:3A:D7:01:51:74:AD:99:EE:5B:AC:16:0B:81:FC:B1:15:CE:B5:BA:08:73:2E:E2:0F:5B:5A:19",
+        "serialNumber": "5978424234272589169"
+      }
+    },
+    {
+      "id": "log-1785231956356-xxl9e",
+      "timestamp": "2026-07-28T09:45:56.356Z",
+      "action": "RESET_CA_CONFIGURATION",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "08ab4981c9b2f8e32ebc393905ce63d401de4db8435338b75790073fa44fbcff",
+      "details": {
+        "message": "CA Configuration reset to uninitialized state."
+      }
+    },
+    {
+      "id": "log-1785231956347-xvorm",
+      "timestamp": "2026-07-28T09:45:56.347Z",
+      "action": "SESSION_UNLOCK",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ca_session",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "d230f198fe56beb0d72f42d5d96986affdc56da0060258df22d1f844785bb722",
+      "details": {
+        "durationMinutes": 15
+      }
+    },
+    {
+      "id": "log-1785231956337-ribdi",
+      "timestamp": "2026-07-28T09:45:56.337Z",
+      "action": "INITIALIZE_ROOT_CA",
+      "actor": "system",
+      "performedBy": "system",
+      "role": "Admin",
+      "target": "Enterprise Test Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "db103b02c51ee186667a30f694441201b08d6f0269353ffd5fe8cab41949ea05",
+      "details": {
+        "caType": "Root CA",
+        "algorithm": "RSA_2048",
+        "fingerprint": "21:7A:F6:3B:20:D5:56:73:2B:60:2B:4C:F2:9C:CF:44:A5:2D:AC:EC:48:66:6D:8F:65:BB:F2:CC:DC:C9:B9:09",
+        "serialNumber": "8159029262396526868"
+      }
+    },
+    {
+      "id": "log-1785231923207-mcjib",
+      "timestamp": "2026-07-28T09:45:23.207Z",
+      "action": "RESET_CA_CONFIGURATION",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ArtifactGate Root CA v1",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "3d20ca4d1862000d9d263ab0956c54b9d2a68da97ad39dc562b42f5b12b52f15",
+      "details": {
+        "message": "CA Configuration reset to uninitialized state."
+      }
+    },
+    {
+      "id": "log-1785231923190-nbrym",
+      "timestamp": "2026-07-28T09:45:23.190Z",
+      "action": "SESSION_UNLOCK",
+      "actor": "admin",
+      "performedBy": "admin",
+      "role": "Admin",
+      "target": "ca_session",
+      "status": "SUCCESS",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Server/Internal",
+      "integrityHash": "e3b6d1758669c2710ac2b33722f243ec9f215f1d65c45c5e1eba8320b2c3af9b",
+      "details": {
+        "durationMinutes": 15
+      }
+    },
     {
       "id": "log-1785033024809-s7jpq",
       "timestamp": "2026-07-26T02:30:24.809Z",

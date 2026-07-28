@@ -7,7 +7,7 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_FILE = path.join(DATA_DIR, 'ca_database.json');
+const DB_FILE = process.env.DB_PATH ? path.resolve(process.env.DB_PATH) : path.join(DATA_DIR, 'ca_database.json');
 
 const defaultPolicySettings = {
   allowedAlgorithms: ['ECDSA_P256', 'ECDSA_P384', 'RSA_2048', 'RSA_4096', 'ED25519'],
@@ -115,17 +115,39 @@ export function saveDb(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-export function addAuditLog(action, actor, target, status, details = {}) {
+import crypto from 'crypto';
+
+const AUDIT_HMAC_SECRET = 'ca-audit-secret-key-v1';
+
+export function addAuditLog(action, actor, target, status, details = {}, extraMeta = {}) {
   const db = getDb();
+
+  const timestamp = new Date().toISOString();
+  const logId = 'log-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
+  const performedBy = extraMeta.performedBy || actor || 'admin';
+  const role = extraMeta.role || 'Admin';
+  const ipAddress = extraMeta.ipAddress || '127.0.0.1';
+  const userAgent = extraMeta.userAgent || 'Server/Internal';
+
+  // SHA-256 HMAC Integrity Signature Computation
+  const hashPayload = `${logId}:${timestamp}:${action}:${performedBy}:${role}:${target}:${status}:${JSON.stringify(details)}`;
+  const integrityHash = crypto.createHmac('sha256', AUDIT_HMAC_SECRET).update(hashPayload).digest('hex');
+
   const logEntry = {
-    id: 'log-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
-    timestamp: new Date().toISOString(),
+    id: logId,
+    timestamp,
     action,
-    actor: actor || 'admin',
+    actor: performedBy,
+    performedBy,
+    role,
     target: target || 'system',
     status: status || 'SUCCESS',
+    ipAddress,
+    userAgent,
+    integrityHash,
     details
   };
+
   db.auditLogs.unshift(logEntry);
   if (db.auditLogs.length > 1000) {
     db.auditLogs = db.auditLogs.slice(0, 1000);

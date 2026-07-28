@@ -28,11 +28,58 @@ import {
 } from './pki.js';
 import { evaluatePolicy } from './opa.js';
 
+import { handleMcpRequest, MCP_TOOLS_MANIFEST } from './mcp.js';
+
 const app = express();
 const PORT = process.env.PORT || 8088;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
+// RBAC Context & Permission Middleware
+export function getContextFromReq(req) {
+  const role = req.headers['x-user-role'] || 'Admin';
+  const performedBy = req.headers['x-user-name'] || 'admin';
+  const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+  const userAgent = req.headers['user-agent'] || 'Browser/Client';
+
+  return { role, performedBy, ipAddress, userAgent };
+}
+
+export function enforceRole(allowedRoles = []) {
+  return (req, res, next) => {
+    const { role } = getContextFromReq(req);
+
+    if (allowedRoles.length > 0 && !allowedRoles.includes(role)) {
+      addAuditLog('ACCESS_DENIED', req.headers['x-user-name'] || 'user', req.path, 'FORBIDDEN', {
+        requiredRoles: allowedRoles,
+        userRole: role
+      }, getContextFromReq(req));
+
+      return res.status(403).json({
+        error: `Forbidden. Role '${role}' lacks permission for this operation. Required: ${allowedRoles.join(', ')}.`
+      });
+    }
+
+    next();
+  };
+}
+
+// Current User & RBAC Identity API
+app.get('/api/auth/current-user', (req, res) => {
+  res.json(getContextFromReq(req));
+});
+
+// Model Context Protocol (MCP) Interface Endpoint
+app.post('/api/mcp', async (req, res) => {
+  try {
+    const context = getContextFromReq(req);
+    const result = await handleMcpRequest(req.body, context);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ jsonrpc: '2.0', id: req.body?.id || null, error: { code: -32603, message: err.message } });
+  }
+});
 
 // 1. Health & Setup Status API
 app.get('/api/setup/status', (req, res) => {
@@ -123,29 +170,10 @@ app.post('/api/setup/intermediate-csr', (req, res) => {
   }
 });
 
-// 4. Setup Intermediate CA Step 2
-app.post('/api/setup/intermediate-complete', (req, res) => {
+// 2. Root CA Initialization
+app.post('/api/setup/root-init', enforceRole(['Admin']), (req, res) => {
   try {
-    const { caName, organization, organizationalUnit, country, state, locality, algorithm, subCaCertPem, parentRootCertPem, subCaPrivateKeyPem, passphrase } = req.body;
-
-    if (!subCaCertPem || !subCaPrivateKeyPem || !passphrase) {
-      return res.status(400).json({ error: 'Sub-CA Certificate, Private Key, and Master Passphrase are required.' });
-    }
-
-    const config = completeIntermediateCaSetup({
-      caName,
-      organization,
-      organizationalUnit,
-      country,
-      state,
-      locality,
-      algorithm,
-      subCaCertPem,
-      parentRootCertPem: parentRootCertPem || subCaCertPem,
-      subCaPrivateKeyPem,
-      passphrase
-    });
-
+    const config = initializeRootCa(req.body);
     const { caKeyEncrypted, ...safeConfig } = config;
     res.json({ success: true, config: safeConfig });
   } catch (err) {
@@ -153,24 +181,40 @@ app.post('/api/setup/intermediate-complete', (req, res) => {
   }
 });
 
-// 4b. Replace / Renew Sub-CA Certificate
-app.post('/api/setup/replace-cert', (req, res) => {
+// 3. Intermediate CA Setup & Completion
+app.post('/api/setup/intermediate-csr', enforceRole(['Admin', 'Issuer']), (req, res) => {
+  try {
+    const result = generateIntermediateCsr(req.body);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/api/setup/intermediate-complete', enforceRole(['Admin']), (req, res) => {
+  try {
+    const config = completeIntermediateCaSetup(req.body);
+    const { caKeyEncrypted, ...safeConfig } = config;
+    res.json({ success: true, config: safeConfig });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// 4b. Replace Sub-CA Certificate
+app.post('/api/setup/replace-cert', enforceRole(['Admin']), (req, res) => {
   try {
     const { subCaCertPem, parentRootCertPem, subCaPrivateKeyPem, passphrase } = req.body;
-    if (!subCaCertPem) {
-      return res.status(400).json({ error: 'Replacement Sub-CA Certificate PEM is required.' });
-    }
-
     const config = replaceSubCaCertificate({ subCaCertPem, parentRootCertPem, subCaPrivateKeyPem, passphrase });
     const { caKeyEncrypted, ...safeConfig } = config;
-    res.json({ success: true, message: 'Sub-CA Certificate replaced and restored to ACTIVE status.', config: safeConfig });
+    res.json({ success: true, config: safeConfig });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
 // 4c. Reset CA Configuration (Decommission & Re-initialize)
-app.post('/api/setup/reset', (req, res) => {
+app.post('/api/setup/reset', enforceRole(['Admin']), (req, res) => {
   try {
     const { passphrase } = req.body;
     const result = resetCaConfiguration(passphrase);
@@ -314,8 +358,8 @@ app.get('/api/certificates/:id/chain', (req, res) => {
   });
 });
 
-// 7. Issue Certificate Endpoint (OPA Policy Protected)
-app.post('/api/certificates/issue', async (req, res) => {
+// 7. Issue Certificate Endpoint (OPA Policy Protected & RBAC Guarded)
+app.post('/api/certificates/issue', enforceRole(['Admin', 'Issuer', 'Requester']), async (req, res) => {
   try {
     const {
       commonName,
@@ -397,7 +441,7 @@ app.get('/api/acme/directory', (req, res) => {
 });
 
 // 10. Revoke Certificate
-app.post('/api/certificates/revoke', (req, res) => {
+app.post('/api/certificates/revoke', enforceRole(['Admin', 'Issuer']), (req, res) => {
   try {
     const { certId, reasonCode, revocationDetails, masterPassphrase } = req.body;
     if (!certId) {

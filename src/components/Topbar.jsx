@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Server, FileText, CheckCircle2, Lock, Unlock, Terminal, Activity, RefreshCw, AlertTriangle, RotateCcw, Upload } from 'lucide-react';
+import { ShieldCheck, Server, FileText, CheckCircle2, Lock, Unlock, Terminal, Activity, RefreshCw, AlertTriangle, RotateCcw, Upload, Bot, User } from 'lucide-react';
 
-export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onOpenResetWizard }) {
+export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onOpenResetWizard, currentUser, onRoleChange }) {
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [unlockPassphrase, setUnlockPassphrase] = useState('');
   const [unlockDuration, setUnlockDuration] = useState(15);
@@ -210,6 +210,14 @@ export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onO
             </li>
             <li>
               <button
+                className={`nav-tab ${activeTab === 'assistant' ? 'active' : ''}`}
+                onClick={() => setActiveTab('assistant')}
+              >
+                <Bot size={15} /> AI Assistant
+              </button>
+            </li>
+            <li>
+              <button
                 className={`nav-tab ${activeTab === 'api' ? 'active' : ''}`}
                 onClick={() => setActiveTab('api')}
               >
@@ -220,6 +228,22 @@ export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onO
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* RBAC Role Selector Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: '#1e293b', padding: '0.25rem 0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <User size={13} style={{ color: '#38bdf8' }} />
+            <select
+              className="form-select"
+              style={{ fontSize: '0.75rem', padding: '0.15rem 0.4rem', border: 'none', background: 'transparent', color: '#fff', cursor: 'pointer' }}
+              value={currentUser?.role || 'Admin'}
+              onChange={(e) => onRoleChange && onRoleChange(e.target.value)}
+              title="Active Role-Based Access Control (RBAC) Role"
+            >
+              <option value="Admin" style={{ background: '#0f172a' }}>Admin (Full)</option>
+              <option value="Issuer" style={{ background: '#0f172a' }}>Issuer (Sign/Revoke)</option>
+              <option value="Requester" style={{ background: '#0f172a' }}>Requester (Issue Only)</option>
+              <option value="Auditor" style={{ background: '#0f172a' }}>Auditor (Read Only)</option>
+            </select>
+          </div>
           <div className="sync-state" style={{ cursor: 'pointer' }} onClick={() => setShowOpsModal(true)}>
             <span className={`sync-state__dot ${caStatus?.initialized ? (caStatus.config.status === 'REVOKED' ? 'warning' : 'online') : 'warning'}`}></span>
             <div>
