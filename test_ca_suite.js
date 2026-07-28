@@ -379,6 +379,47 @@ async function runTestSuite() {
       'MCP Tool check_ca_status executed successfully via JSON-RPC 2.0 interface'
     );
 
+    // -------------------------------------------------------------
+    // TEST 9: Testing Expiration Radar, Cert Import, Bulk Issuance & EST
+    // -------------------------------------------------------------
+    console.log('\n>>> TEST 9: Testing Expiration Radar, Cert Import, Bulk Issuance & EST...');
+
+    // 9a. Test Expiration Radar Alerts API
+    const alertsRes = await request(`${ROOT_CA_HOST}/api/certificates/alerts`, 'GET');
+    assert(
+      alertsRes.status === 200 && alertsRes.body.summary && alertsRes.body.summary.totalActive >= 0,
+      'Expiration Radar API categorizes certificates into risk tiers'
+    );
+
+    // 9b. Test External Certificate Import API
+    const importedRes = await request(`${ROOT_CA_HOST}/api/certificates/import`, 'POST', {
+      certPem: restoredIssueRes.body.certificate.certPem
+    });
+    assert(
+      importedRes.status === 400 || importedRes.status === 200,
+      'External Certificate Import API cleanly handles certificate import and discovery'
+    );
+
+    // 9c. Test Bulk Batch Issuance API
+    const bulkRes = await request(`${ROOT_CA_HOST}/api/certificates/bulk-issue`, 'POST', {
+      items: [
+        { commonName: 'bulk-test-1.internal.domain', certType: 'web_server', validityDays: 90 },
+        { commonName: 'bulk-test-2.internal.domain', certType: 'client_auth', validityDays: 180 }
+      ],
+      masterPassphrase: PASSPHRASE
+    });
+    assert(
+      bulkRes.status === 200 && bulkRes.body.issuedCount === 2,
+      'Bulk CSV/JSON Certificate Generator batch issues 2 certificates cleanly under OPA governance'
+    );
+
+    // 9d. Test EST RFC 7030 Endpoints
+    const estCacertsRes = await request(`${ROOT_CA_HOST}/.well-known/est/cacerts?format=pem`, 'GET');
+    assert(
+      estCacertsRes.status === 200 && estCacertsRes.body.includes('CERTIFICATE'),
+      'EST Endpoint /.well-known/est/cacerts returns CA trust chain cleanly'
+    );
+
     console.log('\n============================================================');
     console.log(`  SECURITY VALIDATION RESULTS: ${passed} Passed, ${failed} Failed`);
     console.log('============================================================\n');

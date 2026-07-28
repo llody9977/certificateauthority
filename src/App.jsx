@@ -7,6 +7,8 @@ import { OpaManager } from './components/OpaManager.jsx';
 import { AuditLogViewer } from './components/AuditLogViewer.jsx';
 import { ApiExplorer } from './components/ApiExplorer.jsx';
 import { AiAssistant } from './components/AiAssistant.jsx';
+import { ExpirationRadar } from './components/ExpirationRadar.jsx';
+import { BulkIssuance } from './components/BulkIssuance.jsx';
 
 export function App() {
   const [activeTab, setActiveTab] = useState('explorer');
@@ -68,6 +70,10 @@ export function App() {
         {activeTab === 'opa' && <OpaManager />}
 
         {activeTab === 'audit' && <AuditLogViewer />}
+
+        {activeTab === 'radar' && <ExpirationRadar />}
+
+        {activeTab === 'bulk' && <BulkIssuance onComplete={fetchCaStatus} />}
 
         {activeTab === 'assistant' && (
           <AiAssistant

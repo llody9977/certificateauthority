@@ -573,14 +573,162 @@ app.get('/api/crl', (req, res) => {
   }
 });
 
-// 17. CA Chain Download
-app.get('/api/ca/chain', (req, res) => {
-  const db = getDb();
-  if (!db.config) return res.status(404).json({ error: 'CA is not initialized' });
+import { handleEstCacerts, handleEstSimpleEnroll } from './est.js';
 
-  res.setHeader('Content-Type', 'application/x-pem-file');
-  res.setHeader('Content-Disposition', `attachment; filename="${db.config.caName || 'ca-chain'}.pem"`);
-  res.send(db.config.chainPem || db.config.caCertPem);
+// 18. EST (Enrollment over Secure Transport - RFC 7030) Endpoints
+app.get('/.well-known/est/cacerts', (req, res) => handleEstCacerts(req, res));
+app.post('/.well-known/est/simpleenroll', express.text({ type: '*/*', limit: '5mb' }), (req, res) => {
+  const context = getContextFromReq(req);
+  handleEstSimpleEnroll(req, res, context);
+});
+
+// 19. External Certificate Import & Unified Discovery API
+app.post('/api/certificates/import', enforceRole(['Admin', 'Issuer']), (req, res) => {
+  try {
+    const { certPem } = req.body;
+    if (!certPem || typeof certPem !== 'string' || !certPem.includes('CERTIFICATE')) {
+      return res.status(400).json({ error: 'Valid X.509 Certificate PEM string is required.' });
+    }
+
+    const forgeCert = pki.certificateFromPem(certPem);
+    const cnAttr = forgeCert.subject.attributes.find(a => a.name === 'commonName' || a.shortName === 'CN');
+    const commonName = cnAttr ? cnAttr.value : 'external-import';
+    const fingerprint = computeFingerprint(certPem);
+    const serialNumber = forgeCert.serialNumber;
+
+    const db = getDb();
+    if (db.certificates.some(c => c.fingerprint === fingerprint || c.serialNumber === serialNumber)) {
+      return res.status(400).json({ error: 'Certificate already exists in inventory.' });
+    }
+
+    const importedRecord = {
+      id: 'ext-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+      commonName,
+      serialNumber,
+      certPem,
+      fingerprint,
+      certType: 'external_imported',
+      profile: 'external',
+      validFrom: forgeCert.validity.notBefore.toISOString(),
+      validTo: forgeCert.validity.notAfter.toISOString(),
+      status: new Date() > forgeCert.validity.notAfter ? 'EXPIRED' : 'ACTIVE',
+      importedAt: new Date().toISOString(),
+      isExternal: true,
+      hasPrivateKey: false
+    };
+
+    db.certificates.unshift(importedRecord);
+    saveDb(db);
+
+    addAuditLog('IMPORT_EXTERNAL_CERTIFICATE', getContextFromReq(req).performedBy, commonName, 'SUCCESS', {
+      serialNumber,
+      fingerprint
+    }, getContextFromReq(req));
+
+    res.json({ success: true, certificate: importedRecord });
+  } catch (err) {
+    res.status(400).json({ error: `Certificate Import Failed: ${err.message}` });
+  }
+});
+
+// 20. Bulk CSV/JSON Batch Certificate Issuance API
+app.post('/api/certificates/bulk-issue', enforceRole(['Admin', 'Issuer']), async (req, res) => {
+  try {
+    const { items, masterPassphrase } = req.body; // items: Array of { commonName, certType, validityDays, algorithm }
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Array of certificate request items is required.' });
+    }
+
+    if (items.length > 100) {
+      return res.status(400).json({ error: 'Bulk issuance batch size limit is 100 items per request.' });
+    }
+
+    const results = [];
+    const errors = [];
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      try {
+        const cert = await issueCertificate({
+          commonName: item.commonName,
+          certType: item.certType || 'web_server',
+          profile: item.profile || 'standard',
+          validityDays: parseInt(item.validityDays || 365),
+          algorithm: item.algorithm || 'RSA_2048',
+          sans: item.sans || [item.commonName],
+          masterPassphrase
+        });
+
+        const { privateKeyPem, ...safe } = cert;
+        results.push({ index: i, commonName: item.commonName, success: true, certificate: safe });
+      } catch (err) {
+        errors.push({ index: i, commonName: item.commonName, success: false, error: err.message });
+      }
+    }
+
+    addAuditLog('BULK_ISSUE_CERTIFICATES', getContextFromReq(req).performedBy, `${results.length} Certs Issued`, 'SUCCESS', {
+      requestedCount: items.length,
+      successCount: results.length,
+      errorCount: errors.length
+    }, getContextFromReq(req));
+
+    res.json({
+      success: true,
+      requestedCount: items.length,
+      issuedCount: results.length,
+      errorCount: errors.length,
+      issuedCertificates: results,
+      errors
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// 21. Certificate Expiration Radar & Webhook Alerts API
+app.get('/api/certificates/alerts', (req, res) => {
+  const db = getDb();
+  const now = new Date();
+
+  const activeCerts = db.certificates.filter(c => c.status === 'ACTIVE');
+
+  const critical = []; // < 14 days
+  const warning = [];  // < 30 days
+  const attention = [];// < 60 days
+  const healthy = [];  // > 60 days
+
+  activeCerts.forEach(c => {
+    const validTo = new Date(c.validTo);
+    const diffDays = Math.ceil((validTo - now) / (1000 * 60 * 60 * 24));
+
+    const item = {
+      id: c.id,
+      commonName: c.commonName,
+      serialNumber: c.serialNumber,
+      certType: c.certType,
+      validTo: c.validTo,
+      daysRemaining: diffDays
+    };
+
+    if (diffDays <= 14) critical.push(item);
+    else if (diffDays <= 30) warning.push(item);
+    else if (diffDays <= 60) attention.push(item);
+    else healthy.push(item);
+  });
+
+  res.json({
+    summary: {
+      totalActive: activeCerts.length,
+      criticalCount: critical.length,
+      warningCount: warning.length,
+      attentionCount: attention.length,
+      healthyCount: healthy.length
+    },
+    critical,
+    warning,
+    attention,
+    healthy
+  });
 });
 
 // Serve frontend static build in production

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Server, FileText, CheckCircle2, Lock, Unlock, Terminal, Activity, RefreshCw, AlertTriangle, RotateCcw, Upload, Bot, User } from 'lucide-react';
+import { ShieldCheck, Server, FileText, CheckCircle2, Lock, Unlock, Terminal, Activity, RefreshCw, AlertTriangle, RotateCcw, Upload, Bot, User, Clock, Layers } from 'lucide-react';
 
 export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onOpenResetWizard, currentUser, onRoleChange }) {
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -206,6 +206,22 @@ export function Topbar({ activeTab, setActiveTab, caStatus, onRefreshStatus, onO
                 onClick={() => setActiveTab('audit')}
               >
                 <Activity size={15} /> Audit Logs
+              </button>
+            </li>
+            <li>
+              <button
+                className={`nav-tab ${activeTab === 'radar' ? 'active' : ''}`}
+                onClick={() => setActiveTab('radar')}
+              >
+                <Clock size={15} /> Expiration Radar
+              </button>
+            </li>
+            <li>
+              <button
+                className={`nav-tab ${activeTab === 'bulk' ? 'active' : ''}`}
+                onClick={() => setActiveTab('bulk')}
+              >
+                <Layers size={15} /> Bulk Studio
               </button>
             </li>
             <li>
