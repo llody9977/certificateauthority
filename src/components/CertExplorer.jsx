@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ShieldCheck, Download, AlertTriangle, Key, Clock, FileText, CheckCircle, RefreshCw, XCircle, ShieldAlert, GitCommit, Layers } from 'lucide-react';
+import {
+  Search, Filter, ShieldCheck, Download, AlertTriangle, Key, Clock,
+  FileText, CheckCircle, RefreshCw, XCircle, ShieldAlert, GitCommit,
+  Layers, ChevronRight, ChevronDown, Upload
+} from 'lucide-react';
 import { ExportModal } from './ExportModal.jsx';
 import { CertImportModal } from './CertImportModal.jsx';
-import { Upload } from 'lucide-react';
 
 function formatDateTime(dateStr) {
   if (!dateStr) return 'N/A';
@@ -21,11 +24,42 @@ function formatDateTime(dateStr) {
   }
 }
 
+function getExpiresInText(validTo) {
+  if (!validTo) return 'N/A';
+  const now = new Date();
+  const end = new Date(validTo);
+  const diffMs = end - now;
+  if (diffMs <= 0) {
+    const pastMs = Math.abs(diffMs);
+    const pastMins = Math.floor(pastMs / (1000 * 60));
+    const pastHours = Math.floor(pastMs / (1000 * 60 * 60));
+    const pastDays = Math.floor(pastMs / (1000 * 60 * 60 * 24));
+    if (pastDays > 0) return `Expired ${pastDays}d ago`;
+    if (pastHours > 0) return `Expired ${pastHours}h ago`;
+    return `Expired ${pastMins}m ago`;
+  } else {
+    const mins = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (days > 0) {
+      const remHours = hours % 24;
+      return `${days}d ${remHours}h left`;
+    }
+    if (hours > 0) {
+      const remMins = mins % 60;
+      return `${hours}h ${remMins}m left`;
+    }
+    return `${mins}m left`;
+  }
+}
+
 export function CertExplorer({ caStatus, onRequestNewCert }) {
   const [certs, setCerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  
+  const [viewMode, setViewMode] = useState('flat'); // 'flat' | 'grouped'
+  const [expandedGroups, setExpandedGroups] = useState({});
+
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -42,6 +76,7 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
 
   // Revocation Modal state
   const [revokeModalCert, setRevokeModalCert] = useState(null);
+  const [revokeMode, setRevokeMode] = useState('revoke_only'); // 'revoke_only' | 'revoke_reissue'
   const [revokeReason, setRevokeReason] = useState('0');
   const [revokeDetails, setRevokeDetails] = useState('');
   const [revokePassphrase, setRevokePassphrase] = useState('');
@@ -95,6 +130,10 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
     }
   };
 
+  const toggleGroup = (cn) => {
+    setExpandedGroups(prev => ({ ...prev, [cn]: !prev[cn] }));
+  };
+
   const handleRevokeSubmit = async () => {
     setRevokeLoading(true);
     setRevokeError(null);
@@ -114,15 +153,174 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to revoke certificate');
 
+      if (revokeMode === 'revoke_reissue') {
+        const reissueRes = await fetch('/api/certificates/issue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            commonName: revokeModalCert.commonName,
+            certType: revokeModalCert.certType || 'web_server',
+            profile: revokeModalCert.profile || 'standard',
+            validityDays: 365,
+            algorithm: revokeModalCert.algorithm || 'RSA_2048',
+            sans: revokeModalCert.sans || [],
+            masterPassphrase: revokePassphrase
+          })
+        });
+        const reissueData = await reissueRes.json();
+        if (!reissueRes.ok) {
+          throw new Error(`Revocation succeeded, but replacement certificate issuance failed: ${reissueData.error}`);
+        }
+      }
+
       setRevokeModalCert(null);
       setRevokePassphrase('');
       setRevokeDetails('');
+      setRevokeMode('revoke_only');
       fetchCertificates();
     } catch (err) {
       setRevokeError(err.message);
     } finally {
       setRevokeLoading(false);
     }
+  };
+
+  // Group certificates by Common Name for Lineage Tree View
+  const groupedCertificates = certs.reduce((acc, cert) => {
+    const cn = cert.commonName || 'Unlabeled';
+    if (!acc[cn]) acc[cn] = [];
+    acc[cn].push(cert);
+    return acc;
+  }, {});
+
+  const renderCertRow = (cert, isNested = false) => {
+    const isExpired = cert.effectiveStatus === 'EXPIRED' || cert.status === 'EXPIRED';
+    const isRevoked = cert.effectiveStatus === 'REVOKED' || cert.status === 'REVOKED';
+    const isChainRevoked = cert.effectiveStatus === 'CHAIN_REVOKED';
+    const isActive = cert.effectiveStatus === 'ACTIVE';
+
+    const expiresInText = getExpiresInText(cert.validTo);
+
+    return (
+      <tr key={cert.id} style={{ background: isNested ? '#f8fafc' : 'inherit' }}>
+        <td style={{ paddingLeft: isNested ? '2.5rem' : '1rem' }}>
+          {isActive ? (
+            <span className="badge badge-emerald">
+              <CheckCircle size={12} /> Active
+            </span>
+          ) : isExpired ? (
+            <span className="badge" style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5' }}>
+              <Clock size={12} /> Expired
+            </span>
+          ) : isChainRevoked ? (
+            <span className="badge badge-amber" title="Parent Sub-CA has been revoked by Root Authority">
+              <ShieldAlert size={12} /> Chain Revoked
+            </span>
+          ) : (
+            <span className="badge badge-rose">
+              <XCircle size={12} /> Revoked
+            </span>
+          )}
+        </td>
+        <td>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <strong style={{ color: 'var(--text-heading)' }}>{cert.commonName}</strong>
+            {cert.isRenewed && (
+              <span className="badge badge-indigo" title={`Renewed by Serial ${cert.renewedBySerial}`} style={{ fontSize: '0.675rem', padding: '0.15rem 0.35rem' }}>
+                <RefreshCw size={10} /> Renewed
+              </span>
+            )}
+          </div>
+          {cert.sans && cert.sans.length > 0 && (
+            <small style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.725rem', display: 'block' }}>
+              SANs: {cert.sans.slice(0, 2).join(', ')}{cert.sans.length > 2 ? ` +${cert.sans.length - 2} more` : ''}
+            </small>
+          )}
+        </td>
+        <td>
+          <span className="badge badge-indigo" style={{ marginRight: '0.35rem' }}>
+            {cert.certType}
+          </span>
+          <span className="badge badge-cyan">{cert.profile}</span>
+        </td>
+        <td>
+          <span className="code-inline">{cert.algorithm}</span>
+        </td>
+        <td>
+          <small style={{ display: 'block', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+            SN: {cert.serialNumber}
+          </small>
+          <small style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', fontSize: '0.675rem' }}>
+            {cert.fingerprint?.substring(0, 18)}...
+          </small>
+        </td>
+        <td>
+          <small style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '0.725rem' }}>
+            To: {formatDateTime(cert.validTo)}
+          </small>
+          <small style={{ display: 'block', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.675rem' }}>
+            From: {formatDateTime(cert.validFrom || cert.issuedAt)}
+          </small>
+        </td>
+        <td>
+          <span className={`badge ${isExpired ? 'badge-rose' : isActive ? 'badge-cyan' : 'badge-amber'}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.725rem' }}>
+            {expiresInText}
+          </span>
+        </td>
+        <td style={{ textAlign: 'right' }}>
+          <div style={{ display: 'flex', gap: '0.35rem', justifyContent: 'flex-end' }}>
+            <button
+              className="btn btn-secondary"
+              style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+              title="Inspect Trust Chain"
+              onClick={() => handleInspectChain(cert)}
+            >
+              <Layers size={12} /> Chain
+            </button>
+            <button
+              className="btn btn-secondary"
+              style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+              onClick={() => setSelectedCert(cert)}
+            >
+              Inspect
+            </button>
+            
+            {/* Export available ONLY for ACTIVE certificates */}
+            {isActive ? (
+              <button
+                className="btn btn-primary"
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                onClick={() => setExportCert(cert)}
+              >
+                <Download size={12} /> Export
+              </button>
+            ) : (
+              <button
+                className="btn btn-secondary"
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', opacity: 0.5, cursor: 'not-allowed' }}
+                title="Export disabled for Expired / Revoked certificates"
+                disabled
+              >
+                <Download size={12} /> Export
+              </button>
+            )}
+
+            {isActive && (
+              <button
+                className="btn btn-danger"
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                onClick={() => {
+                  setRevokeModalCert(cert);
+                  setRevokeMode('revoke_only');
+                }}
+              >
+                Revoke
+              </button>
+            )}
+          </div>
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -161,8 +359,8 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
 
         {/* Search & Multi-field Filter Controls */}
         <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-subtle)' }}>
-          <div className="grid-4" style={{ alignItems: 'center' }}>
-            <div style={{ position: 'relative', gridColumn: 'span 2' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            <div style={{ position: 'relative', flex: 1, minWidth: '260px' }}>
               <Search size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
               <input
                 type="text"
@@ -174,17 +372,15 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
               />
             </div>
 
-            <div>
-              <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <select className="form-select" style={{ width: '150px' }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">All Statuses</option>
                 <option value="ACTIVE">ACTIVE</option>
                 <option value="EXPIRED">EXPIRED</option>
                 <option value="REVOKED">REVOKED</option>
               </select>
-            </div>
 
-            <div>
-              <select className="form-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+              <select className="form-select" style={{ width: '160px' }} value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
                 <option value="">All Cert Types</option>
                 <option value="web_server">Web Server (TLS)</option>
                 <option value="acme_tls">ACME Protocol TLS</option>
@@ -195,6 +391,24 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 <option value="ocsp_signer">OCSP Signer</option>
                 <option value="sub_ca">Sub-CA</option>
               </select>
+
+              {/* View Mode Toggle: Flat List vs Nested Renewal Lineage Groups */}
+              <div style={{ display: 'flex', background: '#f1f5f9', padding: '0.2rem', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
+                <button
+                  className={`btn ${viewMode === 'flat' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+                  onClick={() => setViewMode('flat')}
+                >
+                  Flat List
+                </button>
+                <button
+                  className={`btn ${viewMode === 'grouped' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+                  onClick={() => setViewMode('grouped')}
+                >
+                  <GitCommit size={12} /> Lineage View
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -210,122 +424,70 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
               <th>Type / Profile</th>
               <th>Algorithm</th>
               <th>Serial & Fingerprint</th>
-              <th>Validity</th>
+              <th>Validity Dates</th>
+              <th>Expires In</th>
               <th style={{ textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>
+                <td colSpan={8} style={{ textAlign: 'center', padding: '2rem' }}>
                   Loading certificates...
                 </td>
               </tr>
             ) : certs.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
+                <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
                   No certificates found matching criteria.
                 </td>
               </tr>
+            ) : viewMode === 'flat' ? (
+              certs.map(cert => renderCertRow(cert, false))
             ) : (
-              certs.map((cert) => (
-                <tr key={cert.id}>
-                  <td>
-                    {cert.effectiveStatus === 'ACTIVE' ? (
-                      <span className="badge badge-emerald">
-                        <CheckCircle size={12} /> Active
-                      </span>
-                    ) : cert.effectiveStatus === 'EXPIRED' || cert.status === 'EXPIRED' ? (
-                      <span className="badge" style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5' }}>
-                        <Clock size={12} /> Expired
-                      </span>
-                    ) : cert.effectiveStatus === 'CHAIN_REVOKED' ? (
-                      <span className="badge badge-amber" title="Parent Sub-CA has been revoked by Root Authority">
-                        <ShieldAlert size={12} /> Chain Revoked
-                      </span>
-                    ) : (
-                      <span className="badge badge-rose">
-                        <XCircle size={12} /> Revoked
-                      </span>
+              // Grouped / Nested Renewal Lineage View
+              Object.entries(groupedCertificates).map(([cn, groupCerts]) => {
+                const isExpanded = expandedGroups[cn] ?? true;
+                const headCert = groupCerts.find(c => c.effectiveStatus === 'ACTIVE') || groupCerts[0];
+                const predecessors = groupCerts.filter(c => c.id !== headCert.id);
+
+                return (
+                  <React.Fragment key={cn}>
+                    {/* Group Header Row */}
+                    <tr style={{ background: '#f1f5f9', borderTop: '2px solid var(--border-subtle)', fontWeight: 600 }}>
+                      <td colSpan={8} style={{ padding: '0.6rem 1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <button
+                              className="btn btn-secondary"
+                              style={{ padding: '0.15rem 0.35rem', fontSize: '0.7rem' }}
+                              onClick={() => toggleGroup(cn)}
+                            >
+                              {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                            </button>
+                            <GitCommit size={16} color="var(--color-indigo)" />
+                            <strong style={{ fontSize: '0.95rem', color: 'var(--text-heading)' }}>{cn}</strong>
+                            <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>
+                              {groupCerts.length} {groupCerts.length === 1 ? 'Certificate Version' : 'Lineage Versions'}
+                            </span>
+                          </div>
+                          <small style={{ color: 'var(--text-muted)' }}>
+                            Active Version SN: {headCert.serialNumber}
+                          </small>
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Render Head Certificate & Predecessor Children if expanded */}
+                    {isExpanded && (
+                      <>
+                        {renderCertRow(headCert, false)}
+                        {predecessors.map(pred => renderCertRow(pred, true))}
+                      </>
                     )}
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <strong style={{ color: 'var(--text-heading)' }}>{cert.commonName}</strong>
-                      {cert.isRenewed && (
-                        <span className="badge badge-indigo" title={`Renewed by Serial ${cert.renewedBySerial}`} style={{ fontSize: '0.675rem', padding: '0.15rem 0.35rem' }}>
-                          <RefreshCw size={10} /> Renewed
-                        </span>
-                      )}
-                    </div>
-                    {cert.sans && cert.sans.length > 0 && (
-                      <small style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.725rem', display: 'block' }}>
-                        SANs: {cert.sans.slice(0, 2).join(', ')}{cert.sans.length > 2 ? ` +${cert.sans.length - 2} more` : ''}
-                      </small>
-                    )}
-                  </td>
-                  <td>
-                    <span className="badge badge-indigo" style={{ marginRight: '0.35rem' }}>
-                      {cert.certType}
-                    </span>
-                    <span className="badge badge-cyan">{cert.profile}</span>
-                  </td>
-                  <td>
-                    <span className="code-inline">{cert.algorithm}</span>
-                  </td>
-                  <td>
-                    <small style={{ display: 'block', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-                      SN: {cert.serialNumber}
-                    </small>
-                    <small style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', fontSize: '0.675rem' }}>
-                      {cert.fingerprint?.substring(0, 18)}...
-                    </small>
-                  </td>
-                  <td>
-                    <small style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '0.725rem' }}>
-                      To: {formatDateTime(cert.validTo)}
-                    </small>
-                    <small style={{ display: 'block', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.675rem' }}>
-                      From: {formatDateTime(cert.validFrom || cert.issuedAt)}
-                    </small>
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '0.35rem', justifyContent: 'flex-end' }}>
-                      <button
-                        className="btn btn-secondary"
-                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                        title="Inspect Trust Chain"
-                        onClick={() => handleInspectChain(cert)}
-                      >
-                        <Layers size={12} /> Chain
-                      </button>
-                      <button
-                        className="btn btn-secondary"
-                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                        onClick={() => setSelectedCert(cert)}
-                      >
-                        Inspect
-                      </button>
-                      <button
-                        className="btn btn-primary"
-                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                        onClick={() => setExportCert(cert)}
-                      >
-                        <Download size={12} /> Export
-                      </button>
-                      {cert.status === 'ACTIVE' && (
-                        <button
-                          className="btn btn-danger"
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                          onClick={() => setRevokeModalCert(cert)}
-                        >
-                          Revoke
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))
+                  </React.Fragment>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -352,16 +514,35 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 <p>Analyzing trust chain...</p>
               ) : chainData ? (
                 <div>
-                  <div className={`alert ${chainData.validTrustChain ? 'alert-success' : 'alert-danger'}`} style={{ marginBottom: '1.25rem' }}>
+                  <div
+                    className={`alert ${
+                      chainData.validTrustChain
+                        ? 'alert-success'
+                        : chainCert.effectiveStatus === 'EXPIRED' || chainCert.status === 'EXPIRED'
+                        ? 'alert-warning'
+                        : 'alert-danger'
+                    }`}
+                    style={{ marginBottom: '1.25rem' }}
+                  >
                     {chainData.validTrustChain ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <CheckCircle size={18} />
                         <div><strong>TRUST CHAIN VALID:</strong> Certificate chains to an active trusted Root Authority.</div>
                       </div>
-                    ) : (
+                    ) : chainCert.effectiveStatus === 'EXPIRED' || chainCert.status === 'EXPIRED' ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Clock size={18} />
+                        <div><strong>CERTIFICATE EXPIRED:</strong> The certificate validity period ended on {formatDateTime(chainCert.validTo)}.</div>
+                      </div>
+                    ) : chainCert.effectiveStatus === 'CHAIN_REVOKED' ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <ShieldAlert size={18} />
-                        <div><strong>TRUST CHAIN REVOKED / INVALID:</strong> Parent Sub-CA or End-Entity certificate is revoked.</div>
+                        <div><strong>TRUST CHAIN REVOKED:</strong> The issuing Parent Sub-CA certificate has been revoked by Root Authority.</div>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <XCircle size={18} />
+                        <div><strong>CERTIFICATE REVOKED:</strong> This end-entity certificate has been explicitly revoked.</div>
                       </div>
                     )}
                   </div>
@@ -377,7 +558,7 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                           padding: '1rem',
                           borderRadius: '8px',
                           display: 'flex',
-                          justify: 'space-between',
+                          justifyContent: 'space-between',
                           alignItems: 'center'
                         }}
                       >
@@ -428,8 +609,12 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 <div>
                   <small className="form-label">Status</small>
                   <div>
-                    {selectedCert.status === 'ACTIVE' ? (
+                    {selectedCert.effectiveStatus === 'ACTIVE' ? (
                       <span className="badge badge-emerald">ACTIVE</span>
+                    ) : selectedCert.effectiveStatus === 'EXPIRED' || selectedCert.status === 'EXPIRED' ? (
+                      <span className="badge" style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5' }}>EXPIRED</span>
+                    ) : selectedCert.effectiveStatus === 'CHAIN_REVOKED' ? (
+                      <span className="badge badge-amber">CHAIN REVOKED</span>
                     ) : (
                       <span className="badge badge-rose">REVOKED</span>
                     )}
@@ -468,15 +653,28 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
               <button className="btn btn-secondary" onClick={() => setSelectedCert(null)}>
                 Close
               </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setExportCert(selectedCert);
-                  setSelectedCert(null);
-                }}
-              >
-                <Download size={14} /> Export Options
-              </button>
+
+              {/* Export Button restricted ONLY to ACTIVE certificates */}
+              {selectedCert.effectiveStatus === 'ACTIVE' ? (
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setExportCert(selectedCert);
+                    setSelectedCert(null);
+                  }}
+                >
+                  <Download size={14} /> Export Options
+                </button>
+              ) : (
+                <button
+                  className="btn btn-secondary"
+                  style={{ opacity: 0.5, cursor: 'not-allowed' }}
+                  title="Export disabled for Expired or Revoked certificates"
+                  disabled
+                >
+                  <Download size={14} /> Export Options (Disabled)
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -509,6 +707,32 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
               </p>
 
               <div className="form-group">
+                <label className="form-label">Revocation Workflow Action</label>
+                <div style={{ display: 'flex', gap: '1.25rem', marginTop: '0.35rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', cursor: 'pointer' }}>
+                    <input
+                      type="radio"
+                      name="revokeMode"
+                      value="revoke_only"
+                      checked={revokeMode === 'revoke_only'}
+                      onChange={() => setRevokeMode('revoke_only')}
+                    />
+                    Revoke Only
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.875rem', cursor: 'pointer' }}>
+                    <input
+                      type="radio"
+                      name="revokeMode"
+                      value="revoke_reissue"
+                      checked={revokeMode === 'revoke_reissue'}
+                      onChange={() => setRevokeMode('revoke_reissue')}
+                    />
+                    <RefreshCw size={14} color="var(--color-indigo)" /> Revoke & Re-issue Replacement Certificate
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-group">
                 <label className="form-label">RFC 5280 Revocation Reason Code</label>
                 <select className="form-select" value={revokeReason} onChange={(e) => setRevokeReason(e.target.value)}>
                   <option value="0">0: Unspecified</option>
@@ -526,7 +750,7 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 <input
                   type="text"
                   className="form-input"
-                  placeholder="e.g. Server decommissioned or private key compromised"
+                  placeholder="e.g. Key compromise recovery or server decommissioned"
                   value={revokeDetails}
                   onChange={(e) => setRevokeDetails(e.target.value)}
                 />
@@ -550,7 +774,7 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                 Cancel
               </button>
               <button className="btn btn-danger" onClick={handleRevokeSubmit} disabled={revokeLoading}>
-                {revokeLoading ? 'Revoking...' : 'Confirm Revocation'}
+                {revokeLoading ? 'Processing...' : revokeMode === 'revoke_reissue' ? 'Revoke & Issue Replacement' : 'Confirm Revocation'}
               </button>
             </div>
           </div>
@@ -562,3 +786,5 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
     </div>
   );
 }
+
+export default CertExplorer;

@@ -67,13 +67,13 @@ export function checkAndUpdateExpiredCertificates() {
         if (expiryDate < now) {
           c.status = 'EXPIRED';
           modified = true;
-          addAuditLog('CERTIFICATE_EXPIRED', 'system', c.commonName || c.serialNumber || 'Certificate', 'EXPIRED', {
+          addAuditLog('CERTIFICATE_EXPIRED', 'system-auto-expiration', c.commonName || c.serialNumber || 'Certificate', 'EXPIRED', {
             certId: c.id,
             serialNumber: c.serialNumber,
             commonName: c.commonName,
             validTo: c.validTo,
             certType: c.certType
-          });
+          }, { performedBy: 'system-auto-expiration', role: 'System' });
         }
       }
     });
@@ -86,13 +86,13 @@ export function checkAndUpdateExpiredCertificates() {
         if (expiryDate < now) {
           c.status = 'EXPIRED';
           modified = true;
-          addAuditLog('SSH_CERTIFICATE_EXPIRED', 'system', c.identity || c.serialNumber || 'SSH Certificate', 'EXPIRED', {
+          addAuditLog('SSH_CERTIFICATE_EXPIRED', 'system-auto-expiration', c.identity || c.serialNumber || 'SSH Certificate', 'EXPIRED', {
             certId: c.id,
             serialNumber: c.serialNumber,
             identity: c.identity,
             validTo: c.validTo,
             certType: c.certType
-          });
+          }, { performedBy: 'system-auto-expiration', role: 'System' });
         }
       }
     });
@@ -153,10 +153,10 @@ export async function syncParentCrlAndCheckRevocation(forceRefresh = false) {
             saveDb(db);
             invalidateRevocationCache();
 
-            addAuditLog('PARENT_CRL_SYNC', 'system', db.config.caName, 'CA_REVOKED_BY_PARENT', {
+            addAuditLog('PARENT_CRL_SYNC', 'system-crl-sync', db.config.caName, 'CA_REVOKED_BY_PARENT', {
               serialNumber: db.config.serialNumber,
               crlUrl
-            });
+            }, { performedBy: 'system-crl-sync', role: 'System' });
 
             return { caStatus: 'REVOKED', reason: 'Revoked by Parent Root CA via CRL Sync' };
           }

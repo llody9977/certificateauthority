@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Search, ShieldAlert, CheckCircle, Download, FileText, Filter, Eye } from 'lucide-react';
+import { Activity, Search, ShieldAlert, ShieldCheck, CheckCircle, Download, FileText, Filter, Eye } from 'lucide-react';
 
 export function AuditLogViewer() {
   const [logs, setLogs] = useState([]);
