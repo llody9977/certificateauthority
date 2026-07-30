@@ -454,6 +454,32 @@ app.post('/api/certificates/issue', enforceRole(['Admin', 'Issuer', 'Requester']
   }
 });
 
+// 7b. Toggle Auto-Renewal Status for Certificate (RBAC Protected)
+app.post('/api/certificates/:id/auto-renew', enforceRole(['Admin', 'Issuer']), (req, res) => {
+  try {
+    const { enabled } = req.body;
+    const db = getDb();
+    const cert = db.certificates.find(c => c.id === req.params.id || c.serialNumber === req.params.id);
+    if (!cert) return res.status(404).json({ error: 'Certificate not found' });
+
+    cert.autoRenew = Boolean(enabled);
+    saveDb(db);
+
+    addAuditLog(
+      enabled ? 'ENABLE_AUTO_RENEWAL' : 'DISABLE_AUTO_RENEWAL',
+      getContextFromReq(req).performedBy,
+      cert.commonName || cert.serialNumber,
+      'SUCCESS',
+      { certId: cert.id, serialNumber: cert.serialNumber, autoRenew: cert.autoRenew },
+      getContextFromReq(req)
+    );
+
+    res.json({ success: true, certificate: cert });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // 8. Issue OpenSSH User/Host Certificate
 app.post('/api/ssh/issue', (req, res) => {
   try {

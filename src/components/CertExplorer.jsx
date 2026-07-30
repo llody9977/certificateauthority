@@ -25,31 +25,19 @@ function formatDateTime(dateStr) {
 }
 
 function getExpiresInText(validTo) {
-  if (!validTo) return 'N/A';
+  if (!validTo) return '-';
   const now = new Date();
   const end = new Date(validTo);
   const diffMs = end - now;
   if (diffMs <= 0) {
-    const pastMs = Math.abs(diffMs);
-    const pastMins = Math.floor(pastMs / (1000 * 60));
-    const pastHours = Math.floor(pastMs / (1000 * 60 * 60));
-    const pastDays = Math.floor(pastMs / (1000 * 60 * 60 * 24));
-    if (pastDays > 0) return `Expired ${pastDays}d ago`;
-    if (pastHours > 0) return `Expired ${pastHours}h ago`;
-    return `Expired ${pastMins}m ago`;
+    return '-';
   } else {
     const mins = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMs / (1000 * 60 * 60));
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (days > 0) {
-      const remHours = hours % 24;
-      return `${days}d ${remHours}h left`;
-    }
-    if (hours > 0) {
-      const remMins = mins % 60;
-      return `${hours}h ${remMins}m left`;
-    }
-    return `${mins}m left`;
+    if (days > 0) return `${days}d`;
+    if (hours > 0) return `${hours}h`;
+    return `${mins}m`;
   }
 }
 
@@ -132,6 +120,21 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
 
   const toggleGroup = (cn) => {
     setExpandedGroups(prev => ({ ...prev, [cn]: !prev[cn] }));
+  };
+
+  const handleToggleAutoRenew = async (cert, enable) => {
+    try {
+      const res = await fetch(`/api/certificates/${cert.id}/auto-renew`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: enable })
+      });
+      if (res.ok) {
+        fetchCertificates();
+      }
+    } catch (err) {
+      console.error('Error toggling auto-renew:', err);
+    }
   };
 
   const handleRevokeSubmit = async () => {
@@ -223,11 +226,30 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
           )}
         </td>
         <td>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             <strong style={{ color: 'var(--text-heading)' }}>{cert.commonName}</strong>
             {cert.isRenewed && (
               <span className="badge badge-indigo" title={`Renewed by Serial ${cert.renewedBySerial}`} style={{ fontSize: '0.675rem', padding: '0.15rem 0.35rem' }}>
                 <RefreshCw size={10} /> Renewed
+              </span>
+            )}
+            {cert.autoRenew ? (
+              <span
+                className="badge badge-emerald"
+                style={{ cursor: 'pointer', fontSize: '0.65rem', padding: '0.15rem 0.35rem' }}
+                title="Auto-Renew Enabled (Click to disable)"
+                onClick={() => handleToggleAutoRenew(cert, false)}
+              >
+                <RefreshCw size={9} /> Auto-Renew On
+              </span>
+            ) : (
+              <span
+                className="badge badge-secondary"
+                style={{ cursor: 'pointer', fontSize: '0.65rem', padding: '0.15rem 0.35rem', opacity: 0.75 }}
+                title="Click to Enable Auto-Renew"
+                onClick={() => handleToggleAutoRenew(cert, true)}
+              >
+                + Auto-Renew
               </span>
             )}
           </div>

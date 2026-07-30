@@ -64,6 +64,8 @@ export function checkAndUpdateExpiredCertificates() {
     db.certificates.forEach(c => {
       if (c.validTo && c.status !== 'EXPIRED' && c.status !== 'REVOKED') {
         const expiryDate = new Date(c.validTo);
+        const diffDays = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+
         if (expiryDate < now) {
           c.status = 'EXPIRED';
           modified = true;
@@ -74,6 +76,14 @@ export function checkAndUpdateExpiredCertificates() {
             validTo: c.validTo,
             certType: c.certType
           }, { performedBy: 'system-auto-expiration', role: 'System' });
+        } else if (c.autoRenew && !c.autoRenewed && diffDays <= 30 && c.status === 'ACTIVE') {
+          c.autoRenewed = true;
+          modified = true;
+          addAuditLog('AUTO_RENEWAL_TRIGGERED', 'system-auto-renewal', c.commonName || c.serialNumber, 'SUCCESS', {
+            originalCertId: c.id,
+            serialNumber: c.serialNumber,
+            daysRemaining: diffDays
+          }, { performedBy: 'system-auto-renewal', role: 'System' });
         }
       }
     });
