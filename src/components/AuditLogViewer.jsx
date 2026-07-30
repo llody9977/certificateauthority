@@ -35,21 +35,32 @@ export function AuditLogViewer() {
   }, [searchQuery, actionFilter, statusFilter]);
 
   const handleExportCsv = () => {
-    const headers = ['ID', 'Timestamp', 'Action', 'Actor', 'Target', 'Status', 'Details'];
+    const headers = ['ID', 'Timestamp', 'Action', 'Actor', 'Target', 'Status', 'IntegrityHash', 'FullPayloadJSON'];
     const rows = logs.map(l => [
-      l.id,
-      l.timestamp,
-      l.action,
-      l.actor,
-      l.target,
-      l.status,
-      JSON.stringify(l.details).replace(/"/g, '""')
+      `"${l.id}"`,
+      `"${l.timestamp}"`,
+      `"${l.action}"`,
+      `"${l.actor}"`,
+      `"${l.target}"`,
+      `"${l.status}"`,
+      `"${l.integrityHash || ''}"`,
+      `"${JSON.stringify(l).replace(/"/g, '""')}"`
     ]);
     const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `audit_logs_${Date.now()}.csv`);
+    link.setAttribute('download', `audit_logs_full_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  const handleExportJson = () => {
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(logs, null, 2))}`;
+    const link = document.createElement('a');
+    link.setAttribute('href', jsonString);
+    link.setAttribute('download', `audit_logs_full_${Date.now()}.json`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -68,9 +79,14 @@ export function AuditLogViewer() {
               Tamper-evident, immutable audit trail of every CA initialization, certificate issuance, revocation, OPA policy change, and export.
             </p>
           </div>
-          <button className="btn btn-secondary" onClick={handleExportCsv}>
-            <Download size={14} /> Export Audit Log CSV
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button className="btn btn-secondary" onClick={handleExportJson}>
+              <Download size={14} /> Export Audit Payload (JSON)
+            </button>
+            <button className="btn btn-primary" onClick={handleExportCsv}>
+              <Download size={14} /> Export Full Audit CSV
+            </button>
+          </div>
         </div>
 
         {/* Filter & Search Bar */}

@@ -7,7 +7,9 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_FILE = process.env.DB_PATH ? path.resolve(process.env.DB_PATH) : path.join(DATA_DIR, 'ca_database.json');
+const DB_FILE = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(DATA_DIR, process.env.PORT ? `ca_database_${process.env.PORT}.json` : 'ca_database.json');
 
 const defaultPolicySettings = {
   allowedAlgorithms: ['ECDSA_P256', 'ECDSA_P384', 'RSA_2048', 'RSA_4096', 'ED25519'],
@@ -124,7 +126,8 @@ export function addAuditLog(action, actor, target, status, details = {}, extraMe
 
   const timestamp = new Date().toISOString();
   const logId = 'log-' + Date.now() + '-' + crypto.randomUUID().split('-')[0];
-  const performedBy = extraMeta.performedBy || actor || 'admin';
+  const rawActor = extraMeta.performedBy || actor;
+  const performedBy = (rawActor && rawActor !== 'anonymous') ? rawActor : 'System';
   const role = extraMeta.role || 'Admin';
   const ipAddress = extraMeta.ipAddress || '127.0.0.1';
   const userAgent = extraMeta.userAgent || 'Server/Internal';

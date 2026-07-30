@@ -174,6 +174,9 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
         if (!reissueRes.ok) {
           throw new Error(`Revocation succeeded, but replacement certificate issuance failed: ${reissueData.error}`);
         }
+        if (reissueData.certificate) {
+          setExportCert(reissueData.certificate);
+        }
       }
 
       setRevokeModalCert(null);
@@ -592,8 +595,10 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                           <small style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>SN: {node.serialNumber}</small>
                         </div>
                         <div>
-                          {node.status === 'ACTIVE' ? (
+                          {node.status === 'ACTIVE' && !(node.level === 'END_ENTITY' && (chainCert.effectiveStatus === 'EXPIRED' || chainCert.status === 'EXPIRED')) ? (
                             <span className="badge badge-emerald">ACTIVE TRUST</span>
+                          ) : (node.level === 'END_ENTITY' && (chainCert.effectiveStatus === 'EXPIRED' || chainCert.status === 'EXPIRED')) ? (
+                            <span className="badge" style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5' }}>EXPIRED</span>
                           ) : (
                             <span className="badge badge-rose">REVOKED</span>
                           )}

@@ -60,7 +60,8 @@ app.use('/api', (req, res, next) => {
 // RBAC Context & Permission Middleware
 export function getContextFromReq(req) {
   const role = req.headers['x-user-role'] || 'Guest';
-  const performedBy = req.headers['x-user-name'] || 'anonymous';
+  const rawUser = req.headers['x-user-name'];
+  const performedBy = (rawUser && rawUser !== 'anonymous') ? rawUser : 'System';
   const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
   const userAgent = req.headers['user-agent'] || 'Browser/Client';
 
