@@ -4,6 +4,23 @@ import { ExportModal } from './ExportModal.jsx';
 import { CertImportModal } from './CertImportModal.jsx';
 import { Upload } from 'lucide-react';
 
+function formatDateTime(dateStr) {
+  if (!dateStr) return 'N/A';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const mins = String(d.getMinutes()).padStart(2, '0');
+    const secs = String(d.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${mins}:${secs}`;
+  } catch (e) {
+    return dateStr;
+  }
+}
+
 export function CertExplorer({ caStatus, onRequestNewCert }) {
   const [certs, setCerts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -161,6 +178,7 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
               <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">All Statuses</option>
                 <option value="ACTIVE">ACTIVE</option>
+                <option value="EXPIRED">EXPIRED</option>
                 <option value="REVOKED">REVOKED</option>
               </select>
             </div>
@@ -217,6 +235,10 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                       <span className="badge badge-emerald">
                         <CheckCircle size={12} /> Active
                       </span>
+                    ) : cert.effectiveStatus === 'EXPIRED' || cert.status === 'EXPIRED' ? (
+                      <span className="badge" style={{ backgroundColor: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5' }}>
+                        <Clock size={12} /> Expired
+                      </span>
                     ) : cert.effectiveStatus === 'CHAIN_REVOKED' ? (
                       <span className="badge badge-amber" title="Parent Sub-CA has been revoked by Root Authority">
                         <ShieldAlert size={12} /> Chain Revoked
@@ -228,9 +250,16 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                     )}
                   </td>
                   <td>
-                    <strong style={{ color: 'var(--text-heading)', display: 'block' }}>{cert.commonName}</strong>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <strong style={{ color: 'var(--text-heading)' }}>{cert.commonName}</strong>
+                      {cert.isRenewed && (
+                        <span className="badge badge-indigo" title={`Renewed by Serial ${cert.renewedBySerial}`} style={{ fontSize: '0.675rem', padding: '0.15rem 0.35rem' }}>
+                          <RefreshCw size={10} /> Renewed
+                        </span>
+                      )}
+                    </div>
                     {cert.sans && cert.sans.length > 0 && (
-                      <small style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.725rem' }}>
+                      <small style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.725rem', display: 'block' }}>
                         SANs: {cert.sans.slice(0, 2).join(', ')}{cert.sans.length > 2 ? ` +${cert.sans.length - 2} more` : ''}
                       </small>
                     )}
@@ -253,8 +282,11 @@ export function CertExplorer({ caStatus, onRequestNewCert }) {
                     </small>
                   </td>
                   <td>
-                    <small style={{ display: 'block', color: 'var(--text-muted)' }}>
-                      To: {new Date(cert.validTo).toLocaleDateString()}
+                    <small style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '0.725rem' }}>
+                      To: {formatDateTime(cert.validTo)}
+                    </small>
+                    <small style={{ display: 'block', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '0.675rem' }}>
+                      From: {formatDateTime(cert.validFrom || cert.issuedAt)}
                     </small>
                   </td>
                   <td style={{ textAlign: 'right' }}>

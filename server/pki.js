@@ -50,6 +50,61 @@ export function normalizeSerialNumber(s) {
 }
 
 /**
+ * Automatically inspects inventory for expired X.509 and SSH certificates,
+ * transitions status to EXPIRED, and records audit logs.
+ */
+export function checkAndUpdateExpiredCertificates() {
+  const db = getDb();
+  if (!db || (!db.certificates && !db.sshCertificates)) return;
+
+  const now = new Date();
+  let modified = false;
+
+  if (Array.isArray(db.certificates)) {
+    db.certificates.forEach(c => {
+      if (c.validTo && c.status !== 'EXPIRED' && c.status !== 'REVOKED') {
+        const expiryDate = new Date(c.validTo);
+        if (expiryDate < now) {
+          c.status = 'EXPIRED';
+          modified = true;
+          addAuditLog('CERTIFICATE_EXPIRED', 'system', c.commonName || c.serialNumber || 'Certificate', 'EXPIRED', {
+            certId: c.id,
+            serialNumber: c.serialNumber,
+            commonName: c.commonName,
+            validTo: c.validTo,
+            certType: c.certType
+          });
+        }
+      }
+    });
+  }
+
+  if (Array.isArray(db.sshCertificates)) {
+    db.sshCertificates.forEach(c => {
+      if (c.validTo && c.status !== 'EXPIRED' && c.status !== 'REVOKED') {
+        const expiryDate = new Date(c.validTo);
+        if (expiryDate < now) {
+          c.status = 'EXPIRED';
+          modified = true;
+          addAuditLog('SSH_CERTIFICATE_EXPIRED', 'system', c.identity || c.serialNumber || 'SSH Certificate', 'EXPIRED', {
+            certId: c.id,
+            serialNumber: c.serialNumber,
+            identity: c.identity,
+            validTo: c.validTo,
+            certType: c.certType
+          });
+        }
+      }
+    });
+  }
+
+  if (modified) {
+    saveDb(db);
+    invalidateRevocationCache();
+  }
+}
+
+/**
  * Robust Multi-Host Parent CRL Revocation Sync Engine for Docker Containers & Local Environments
  */
 export async function syncParentCrlAndCheckRevocation(forceRefresh = false) {
@@ -71,6 +126,10 @@ export async function syncParentCrlAndCheckRevocation(forceRefresh = false) {
 
     for (const crlUrl of candidateUrls) {
       try {
+        if (crlUrl.includes('169.254.169.254') || crlUrl.includes('metadata.google.internal')) {
+          continue; // SSRF Block
+        }
+        
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2000);
 
@@ -113,6 +172,7 @@ export async function syncParentCrlAndCheckRevocation(forceRefresh = false) {
 }
 
 export function getRevocationStatusWithTtlCache(forceRefresh = false) {
+  checkAndUpdateExpiredCertificates();
   const now = Date.now();
   const cacheAge = now - revocationCache.lastQueryTime;
 
@@ -629,6 +689,7 @@ export async function issueCertificate({
   certType = 'web_server',
   profile = 'standard',
   validityDays = 365,
+  validityMinutes,
   algorithm = 'RSA_2048',
   sans = [],
   csrPem,
@@ -683,7 +744,11 @@ export async function issueCertificate({
 
   cert.validity.notBefore = new Date();
   cert.validity.notAfter = new Date();
-  cert.validity.notAfter.setDate(cert.validity.notBefore.getDate() + parseInt(validityDays));
+  if (validityMinutes) {
+    cert.validity.notAfter.setTime(cert.validity.notBefore.getTime() + (parseInt(validityMinutes) * 60 * 1000));
+  } else {
+    cert.validity.notAfter.setDate(cert.validity.notBefore.getDate() + parseInt(validityDays));
+  }
 
   const subjectAttrs = formatSubjectAttrs({ commonName, organization, organizationalUnit, country, state, locality, emailAddress });
   cert.setSubject(subjectAttrs);

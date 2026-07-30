@@ -35,6 +35,27 @@ export function App() {
     fetchCaStatus();
   }, []);
 
+  // Global Fetch Interceptor to automatically inject RBAC headers
+  useEffect(() => {
+    const originalFetch = window.fetch;
+    window.fetch = async function () {
+      let [resource, config] = arguments;
+      if (typeof resource === 'string' && resource.startsWith('/api/')) {
+        config = config || {};
+        config.headers = {
+          'X-User-Role': currentUser.role,
+          'X-User-Name': currentUser.performedBy,
+          ...config.headers
+        };
+      }
+      return originalFetch.apply(this, [resource, config]);
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [currentUser]);
+
   const handleWizardComplete = (newConfig) => {
     setShowWizard(false);
     fetchCaStatus();

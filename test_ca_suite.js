@@ -30,6 +30,8 @@ function request(url, method = 'GET', body = null, extraHeaders = {}) {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData),
         'Connection': 'close',
+        'X-User-Role': 'Admin',
+        'X-User-Name': 'admin-test',
         ...extraHeaders
       }
     };
@@ -418,6 +420,40 @@ async function runTestSuite() {
     assert(
       estCacertsRes.status === 200 && estCacertsRes.body.includes('CERTIFICATE'),
       'EST Endpoint /.well-known/est/cacerts returns CA trust chain cleanly'
+    );
+
+    // -------------------------------------------------------------
+    // TEST 10: Auto-Expiration Engine, Renewal Detection & Universal Audit Trail
+    // -------------------------------------------------------------
+    console.log('\n>>> TEST 10: Testing Auto-Expiration Engine, Renewal Detection & Audit Trail...');
+
+    // 10a. Verify Universal API Audit Logging
+    const universalAuditLogsRes = await request(`${ROOT_CA_HOST}/api/audit-logs`, 'GET');
+    assert(
+      universalAuditLogsRes.status === 200 &&
+        universalAuditLogsRes.body.auditLogs &&
+        universalAuditLogsRes.body.auditLogs.some(l => l.action.startsWith('API_') || l.action.startsWith('MCP_TOOL_')),
+      'Universal API & MCP Request Audit Logging records all endpoint interactions'
+    );
+
+    // 10b. Verify Renewal Detection
+    const renew1 = await request(`${ROOT_CA_HOST}/api/certificates/issue`, 'POST', {
+      commonName: 'renewable.test.domain',
+      certType: 'web_server',
+      validityDays: 30,
+      masterPassphrase: PASSPHRASE
+    });
+    const renew2 = await request(`${ROOT_CA_HOST}/api/certificates/issue`, 'POST', {
+      commonName: 'renewable.test.domain',
+      certType: 'web_server',
+      validityDays: 60,
+      masterPassphrase: PASSPHRASE
+    });
+    const certListRes = await request(`${ROOT_CA_HOST}/api/certificates?query=renewable.test.domain`, 'GET');
+    const oldRenewedCert = certListRes.body.certificates.find(c => c.id === renew1.body.certificate.id);
+    assert(
+      oldRenewedCert && oldRenewedCert.isRenewed && oldRenewedCert.renewedBySerial === renew2.body.certificate.serialNumber,
+      'Certificate Renewal Detector flags superseded certificates and links successor serial number'
     );
 
     console.log('\n============================================================');

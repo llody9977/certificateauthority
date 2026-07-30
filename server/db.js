@@ -117,13 +117,13 @@ export function saveDb(data) {
 
 import crypto from 'crypto';
 
-const AUDIT_HMAC_SECRET = 'ca-audit-secret-key-v1';
+const AUDIT_HMAC_SECRET = process.env.AUDIT_HMAC_SECRET || 'ca-audit-secret-key-v1';
 
 export function addAuditLog(action, actor, target, status, details = {}, extraMeta = {}) {
   const db = getDb();
 
   const timestamp = new Date().toISOString();
-  const logId = 'log-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
+  const logId = 'log-' + Date.now() + '-' + crypto.randomUUID().split('-')[0];
   const performedBy = extraMeta.performedBy || actor || 'admin';
   const role = extraMeta.role || 'Admin';
   const ipAddress = extraMeta.ipAddress || '127.0.0.1';

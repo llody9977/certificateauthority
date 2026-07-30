@@ -145,7 +145,7 @@ export function ExpirationRadar() {
                     <td><strong>{c.commonName}</strong></td>
                     <td style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{c.serialNumber}</td>
                     <td><span className="badge badge-secondary">{c.certType}</span></td>
-                    <td>{new Date(c.validTo).toLocaleDateString()}</td>
+                    <td style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{new Date(c.validTo).toISOString().replace('T', ' ').substring(0, 19)}</td>
                     <td>
                       <span className={`badge ${c.daysRemaining <= 14 ? 'badge-danger' : 'badge-warning'}`}>
                         {c.daysRemaining} days left

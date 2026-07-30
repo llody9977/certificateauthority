@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 import { getDb, saveDb, addAuditLog, generateRegoFromForm } from './db.js';
 import {
   initializeRootCa,
@@ -24,7 +25,8 @@ import {
   replaceSubCaCertificate,
   resetCaConfiguration,
   updateParentCrlUrl,
-  updateCrlDistributionPoint
+  updateCrlDistributionPoint,
+  checkAndUpdateExpiredCertificates
 } from './pki.js';
 import { evaluatePolicy } from './opa.js';
 
@@ -36,10 +38,29 @@ const PORT = process.env.PORT || 8088;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+// Universal API Request Audit Logging Middleware
+app.use('/api', (req, res, next) => {
+  if (req.path === '/audit-logs') return next();
+
+  res.on('finish', () => {
+    const context = getContextFromReq(req);
+    const statusText = res.statusCode < 400 ? 'SUCCESS' : 'FAILED';
+    const actionName = `API_${req.method}_${req.path.replace(/^\/api\//, '').replace(/\//g, '_').toUpperCase()}`;
+
+    addAuditLog(actionName, context.performedBy, req.path, statusText, {
+      method: req.method,
+      statusCode: res.statusCode,
+      query: req.query
+    }, context);
+  });
+
+  next();
+});
+
 // RBAC Context & Permission Middleware
 export function getContextFromReq(req) {
-  const role = req.headers['x-user-role'] || 'Admin';
-  const performedBy = req.headers['x-user-name'] || 'admin';
+  const role = req.headers['x-user-role'] || 'Guest';
+  const performedBy = req.headers['x-user-name'] || 'anonymous';
   const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
   const userAgent = req.headers['user-agent'] || 'Browser/Client';
 
@@ -256,6 +277,7 @@ app.post('/api/setup/update-cdp', (req, res) => {
 
 // 5. Search & List Certificates
 app.get('/api/certificates', async (req, res) => {
+  checkAndUpdateExpiredCertificates();
   const db = getDb();
 
   // Sync Parent CRL if Intermediate CA
@@ -270,7 +292,15 @@ app.get('/api/certificates', async (req, res) => {
     certs = certs.filter(c => c.certType !== 'root_ca');
   }
 
-  if (status) certs = certs.filter(c => c.status === status.toUpperCase());
+  if (status) {
+    const s = status.toUpperCase();
+    certs = certs.filter(c => {
+      const isExpired = new Date(c.validTo) < new Date();
+      const currentStatus = isExpired ? 'EXPIRED' : c.status;
+      return currentStatus === s;
+    });
+  }
+
   if (certType) certs = certs.filter(c => c.certType === certType);
   if (profile) certs = certs.filter(c => c.profile === profile);
   if (algorithm) certs = certs.filter(c => c.algorithm === algorithm);
@@ -287,10 +317,30 @@ app.get('/api/certificates', async (req, res) => {
 
   const safeCerts = certs.map(c => {
     const { privateKeyPem, ...safe } = c;
+    const isExpired = new Date(c.validTo) < new Date();
+    const currentStatus = isExpired ? 'EXPIRED' : c.status;
+
+    const newerCert = db.certificates.find(other => 
+      other.id !== c.id &&
+      other.commonName &&
+      c.commonName &&
+      other.commonName.toLowerCase() === c.commonName.toLowerCase() &&
+      new Date(other.issuedAt || other.validFrom) > new Date(c.issuedAt || c.validFrom) &&
+      other.status === 'ACTIVE'
+    );
+
+    let effStatus = currentStatus;
+    if ((db.config && db.config.status === 'REVOKED') || c.chainRevoked) {
+      effStatus = 'CHAIN_REVOKED';
+    }
+
     return {
       ...safe,
+      status: currentStatus,
       hasPrivateKey: Boolean(privateKeyPem),
-      effectiveStatus: (db.config && db.config.status === 'REVOKED') || c.chainRevoked ? 'CHAIN_REVOKED' : c.status
+      effectiveStatus: effStatus,
+      isRenewed: Boolean(newerCert),
+      renewedBySerial: newerCert ? newerCert.serialNumber : null
     };
   });
 
@@ -372,6 +422,7 @@ app.post('/api/certificates/issue', enforceRole(['Admin', 'Issuer', 'Requester']
       certType,
       profile,
       validityDays,
+      validityMinutes,
       algorithm,
       sans,
       csrPem,
@@ -389,6 +440,7 @@ app.post('/api/certificates/issue', enforceRole(['Admin', 'Issuer', 'Requester']
       certType,
       profile,
       validityDays,
+      validityMinutes,
       algorithm,
       sans,
       csrPem,
@@ -602,7 +654,7 @@ app.post('/api/certificates/import', enforceRole(['Admin', 'Issuer']), (req, res
     }
 
     const importedRecord = {
-      id: 'ext-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+      id: 'ext-' + Date.now() + '-' + crypto.randomUUID().split('-')[0],
       commonName,
       serialNumber,
       certPem,

@@ -194,6 +194,11 @@ export async function handleMcpRequest(jsonRpcReq, metaContext = {}) {
         throw new Error(`Tool '${name}' not recognized by MCP server.`);
       }
 
+      addAuditLog(`MCP_TOOL_${name.toUpperCase()}`, metaContext.performedBy || 'mcp-agent', name, 'SUCCESS', {
+        tool: name,
+        args
+      }, metaContext);
+
       return {
         jsonrpc: '2.0',
         id,
